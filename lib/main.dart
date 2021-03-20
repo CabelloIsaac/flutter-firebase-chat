@@ -1,5 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_firebase_chat/providers/auth_provider.dart';
+import 'package:provider/provider.dart';
 
 import 'routes.dart';
 import 'ui/screens/login/login_screen.dart';
@@ -14,10 +16,15 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: Constants.APP_NAME,
-      routes: Routes.routes,
-      initialRoute: LoginScreen.route,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => AuthProvider.instance()),
+      ],
+      child: MaterialApp(
+        title: Constants.APP_NAME,
+        routes: Routes.routes,
+        initialRoute: LoginScreen.route,
+      ),
     );
   }
 }
