@@ -68,9 +68,8 @@ class _MyFormState extends State<MyForm> {
 
   String _validatorPassword(String value) {
     if (value.trim().isEmpty)
-      return "Please, enter your password";
-    else if (value.trim().length < 6)
-      return "Password should be at least 6 characters";
+      return "Introduce tu contraseña";
+    else if (value.trim().length < 6) return "La contraseña es muy corta";
     return null;
   }
 
