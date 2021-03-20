@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_firebase_chat/providers/auth_provider.dart';
 import 'package:provider/provider.dart';
 
+import 'auth_screens_manager.dart';
 import 'routes.dart';
-import 'ui/screens/login/login_screen.dart';
 import 'utils/constants.dart';
 
 void main() async {
@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: Constants.APP_NAME,
         routes: Routes.routes,
-        initialRoute: LoginScreen.route,
+        home: AuthScreensManager(),
       ),
     );
   }
