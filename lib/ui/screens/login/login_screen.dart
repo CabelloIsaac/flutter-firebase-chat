@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'widgets/error_message.dart';
 import 'widgets/my_form.dart';
 import 'widgets/header.dart';
 
@@ -25,6 +26,7 @@ class LoginScreen extends StatelessWidget {
                       Header(),
                       SizedBox(height: 40),
                       MyForm(),
+                      ErrorMessage()
                     ],
                   ),
                 ),

@@ -1,5 +1,7 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_firebase_chat/providers/auth_provider.dart';
+import 'package:provider/provider.dart';
 
 class MyForm extends StatefulWidget {
   @override
@@ -9,12 +11,14 @@ class MyForm extends StatefulWidget {
 class _MyFormState extends State<MyForm> {
   final _formKey = GlobalKey<FormState>();
   bool _obscurePassword = true;
+  AuthProvider _authProvider;
 
   final TextEditingController _controllerEmail = TextEditingController();
   final TextEditingController _controllerPassword = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    _authProvider = Provider.of<AuthProvider>(context);
     return Form(
       key: _formKey,
       child: Column(
@@ -74,5 +78,13 @@ class _MyFormState extends State<MyForm> {
     return null;
   }
 
-  void _login() {}
+  void _login() {
+    if (_formKey.currentState.validate()) {
+      String email = _controllerEmail.text.trim();
+      String password = _controllerPassword.text.trim();
+      _authProvider.signInWithEmailAndPassword(email, password);
+    } else {
+      print("Error in some field");
+    }
+  }
 }
