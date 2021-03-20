@@ -1,3 +1,3 @@
 class Constants {
-  static const String APP_NAME = "TestQuick SAS";
+  static const String APP_NAME = "TestQuick";
 }
