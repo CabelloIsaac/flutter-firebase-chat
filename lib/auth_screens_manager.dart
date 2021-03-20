@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_firebase_chat/ui/screens/chats/list/chats_screen.dart';
 import 'package:provider/provider.dart';
 
 import 'providers/auth_provider.dart';
@@ -11,9 +12,7 @@ class AuthScreensManager extends StatelessWidget {
       builder: (context, AuthProvider authProvider, _) {
         switch (authProvider.status) {
           case Status.Authenticated:
-            return Container(
-              child: Text("Logged"),
-            );
+            return ChatsScreen();
           default:
             return LoginScreen();
         }
