@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_firebase_chat/providers/auth_provider.dart';
+import 'package:provider/provider.dart';
 
 import 'widgets/error_message.dart';
+import 'widgets/loading_indicator.dart';
 import 'widgets/my_form.dart';
 import 'widgets/header.dart';
 
@@ -10,6 +13,9 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     var _pageSize = MediaQuery.of(context).size.height;
     var _notifySize = MediaQuery.of(context).padding.top;
+
+    final authProvider = Provider.of<AuthProvider>(context);
+    final authenticating = authProvider.status == Status.Authenticating;
 
     return Scaffold(
       body: SafeArea(
@@ -32,6 +38,7 @@ class LoginScreen extends StatelessWidget {
                 ),
               ),
             ),
+            if (authenticating) LoadingIndicator(),
           ],
         ),
       ),
