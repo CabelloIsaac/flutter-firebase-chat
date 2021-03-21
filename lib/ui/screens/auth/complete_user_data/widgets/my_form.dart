@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_chat/models/db_user.dart';
 import 'package:flutter_firebase_chat/providers/auth_provider.dart';
+import 'package:flutter_firebase_chat/providers/complete_user_data_provider.dart';
 import 'package:flutter_firebase_chat/ui/screens/auth/select_avatar/select_avatar_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -15,11 +16,11 @@ class _MyFormState extends State<MyForm> {
   final TextEditingController _controllerName = TextEditingController();
   final TextEditingController _controllerLastName = TextEditingController();
 
-  AuthProvider _authProvider;
+  CompleteUserDataProvider _completeUserDataProvider;
 
   @override
   Widget build(BuildContext context) {
-    _authProvider = Provider.of<AuthProvider>(context);
+    _completeUserDataProvider = Provider.of<CompleteUserDataProvider>(context);
 
     return Form(
       key: _formKey,
@@ -80,7 +81,7 @@ class _MyFormState extends State<MyForm> {
       String name = _controllerName.text.trim();
       String lastName = _controllerLastName.text.trim();
 
-      _authProvider.dbUser = DBUser(name: name, lastName: lastName);
+      _completeUserDataProvider.dbUser = DBUser(name: name, lastName: lastName);
 
       Navigator.pushNamed(context, SelectAvatarScreen.route);
     }
