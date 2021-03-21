@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:flutter/widgets.dart';
 import 'package:flutter_firebase_chat/models/db_user.dart';
 import 'package:flutter_firebase_chat/models/error_message.dart';
@@ -25,4 +27,6 @@ class CompleteUserDataProvider with ChangeNotifier {
     _dbUser = value;
     notifyListeners();
   }
+
+  Future<void> uploadAvatar(File avatar) {}
 }
