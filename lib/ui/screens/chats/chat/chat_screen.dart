@@ -5,6 +5,7 @@ import 'package:flutter_firebase_chat/providers/chats_provider.dart';
 import 'package:provider/provider.dart';
 
 import 'widgets/appbar.dart';
+import 'widgets/chat_input.dart';
 
 class ChatScreen extends StatefulWidget {
   static final String route = "/ChatScreen";
@@ -22,6 +23,19 @@ class _ChatScreenState extends State<ChatScreen> {
 
     return Scaffold(
       appBar: MyAppBar(),
+      body: Column(
+        children: [
+          Expanded(
+            child: ListView.builder(
+              itemCount: 22,
+              itemBuilder: (context, index) {
+                return Text("Hola");
+              },
+            ),
+          ),
+          ChatInput(),
+        ],
+      ),
     );
   }
 }
