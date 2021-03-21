@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_firebase_chat/models/chat.dart';
 import 'package:flutter_firebase_chat/models/message.dart';
@@ -122,6 +124,33 @@ class ChatsProvider with ChangeNotifier {
     print("Sending message");
     Map<String, dynamic> messageMap = message.toJson();
     messageMap["timestamp"] = FieldValue.serverTimestamp();
+    _addMessageToChat(messageMap);
+  }
+
+  void sendImageMessage(Message message, File image) async {
+    print("Sending message");
+    Map<String, dynamic> messageMap = message.toJson();
+    messageMap["timestamp"] = FieldValue.serverTimestamp();
+
+    String url = await uploadFile(image);
+    messageMap["body"] = url;
+
+    _addMessageToChat(messageMap);
+  }
+
+  Future<String> uploadFile(File file) async {
+    String userId = AuthProvider.getCurrentUserUid();
+    int timestamp = DateTime.now().millisecondsSinceEpoch;
+    String storagePath = 'chats/${chat.id}/$userId-$timestamp.jpg';
+    Reference storageReference =
+        FirebaseStorage.instance.ref().child(storagePath);
+    UploadTask uploadTask = storageReference.putFile(file);
+    TaskSnapshot downloadUrl = await uploadTask.whenComplete(() => null);
+    String url = await downloadUrl.ref.getDownloadURL();
+    return url;
+  }
+
+  void _addMessageToChat(Map<String, dynamic> messageMap) {
     FirebaseFirestore.instance
         .collection("chats")
         .doc(chat.id)

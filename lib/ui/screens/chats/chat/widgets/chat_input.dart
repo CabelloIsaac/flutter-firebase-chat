@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_chat/models/message.dart';
 import 'package:flutter_firebase_chat/providers/auth_provider.dart';
 import 'package:flutter_firebase_chat/providers/chats_provider.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 class ChatInput extends StatefulWidget {
@@ -17,6 +20,7 @@ class ChatInput extends StatefulWidget {
 class _ChatInputState extends State<ChatInput> {
   ChatsProvider _chatsProvider;
   TextEditingController _controller = TextEditingController();
+  final picker = ImagePicker();
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +38,9 @@ class _ChatInputState extends State<ChatInput> {
           IconButton(
             color: Colors.blue,
             icon: Icon(Icons.camera_alt),
-            onPressed: () {},
+            onPressed: () {
+              _getImage();
+            },
           ),
           Expanded(
             child: TextField(
@@ -76,6 +82,20 @@ class _ChatInputState extends State<ChatInput> {
 
       _chatsProvider.sendTextMessage(message);
       _controller.clear();
+    }
+  }
+
+  Future _getImage() async {
+    final pickedFile = await picker.getImage(
+      source: ImageSource.gallery,
+      imageQuality: 50,
+    );
+    if (pickedFile != null) {
+      Message message = Message(
+        from: AuthProvider.getCurrentUserUid(),
+        type: "image",
+      );
+      _chatsProvider.sendImageMessage(message, File(pickedFile.path));
     }
   }
 }

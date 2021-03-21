@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_firebase_chat/models/message.dart';
 import 'package:flutter_firebase_chat/utils/functions.dart';
 
-class SentMessage extends StatelessWidget {
-  const SentMessage({
+class SentImage extends StatelessWidget {
+  const SentImage({
     Key key,
     @required this.message,
   }) : super(key: key);
@@ -18,27 +18,29 @@ class SentMessage extends StatelessWidget {
       child: Align(
         alignment: Alignment.bottomRight,
         child: Container(
-          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+          // padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
           width: screenWidth / 2,
           decoration: BoxDecoration(
             color: Colors.blue,
             borderRadius: BorderRadius.circular(20),
           ),
           child: Wrap(
-            // alignment: WrapAlignment.end,
             children: [
-              Text(
-                message.body,
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  color: Colors.white,
+              ClipRRect(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20),
+                  topRight: Radius.circular(20),
+                ),
+                child: Image.network(
+                  message.body,
+                  height: (screenWidth / 2) - 20,
+                  fit: BoxFit.cover,
                 ),
               ),
-              // Expanded(child: Container()),
               Align(
                 alignment: Alignment.bottomRight,
                 child: Padding(
-                  padding: EdgeInsets.only(top: 6, left: 6),
+                  padding: EdgeInsets.only(top: 6, right: 10, bottom: 10),
                   child: message.timestamp != null
                       ? Text(
                           "${Functions.getMessageTime(message.timestamp)}",
