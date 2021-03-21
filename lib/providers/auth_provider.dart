@@ -112,6 +112,10 @@ class AuthProvider with ChangeNotifier {
     return FirebaseAuth.instance.currentUser.uid;
   }
 
+  static String getCurrentUserEmail() {
+    return FirebaseAuth.instance.currentUser.email;
+  }
+
   void _listenToUserDataChanges() {
     print("_listenToUserDataChanges");
     if (_firebaseUser != null) {

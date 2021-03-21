@@ -23,7 +23,7 @@ class _SelectAvatarScreenState extends State<SelectAvatarScreen> {
   Widget build(BuildContext context) {
     _completeUserDataProvider = Provider.of<CompleteUserDataProvider>(context);
     _avatar = _completeUserDataProvider.avatar;
-    bool uploadingAvatar = _completeUserDataProvider.uploadingAvatar;
+    bool loading = _completeUserDataProvider.loading;
 
     final _pageSize = MediaQuery.of(context).size.height;
     final _notifySize = MediaQuery.of(context).padding.top;
@@ -70,7 +70,7 @@ class _SelectAvatarScreenState extends State<SelectAvatarScreen> {
               ),
             ),
           ),
-          if (uploadingAvatar) LoadingIndicator(),
+          if (loading) LoadingIndicator(),
         ],
       ),
     );
@@ -91,12 +91,14 @@ class _SelectAvatarScreenState extends State<SelectAvatarScreen> {
     });
   }
 
-  void _skipAvatarUpload() {
-    print("Skipping");
+  void _skipAvatarUpload() async {
+    await _completeUserDataProvider.addUserToFirestore();
+    Navigator.pop(context);
   }
 
   void _uploadAvatar() async {
     await _completeUserDataProvider.uploadAvatar();
     await _completeUserDataProvider.addUserToFirestore();
+    Navigator.pop(context);
   }
 }

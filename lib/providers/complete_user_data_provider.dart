@@ -8,18 +8,18 @@ import 'package:flutter_firebase_chat/models/error_message.dart';
 import 'package:flutter_firebase_chat/providers/auth_provider.dart';
 
 class CompleteUserDataProvider with ChangeNotifier {
-  bool _uploadingAvatar = false;
+  bool _loading = false;
   ErrorMessage _errorMessage;
   DBUser _dbUser;
   File _avatar;
 
-  bool get uploadingAvatar => _uploadingAvatar;
+  bool get loading => _loading;
   ErrorMessage get errorMessage => _errorMessage;
   DBUser get dbUser => _dbUser;
   File get avatar => _avatar;
 
-  set uploadingAvatar(bool value) {
-    _uploadingAvatar = value;
+  set loading(bool value) {
+    _loading = value;
     notifyListeners();
   }
 
@@ -39,7 +39,7 @@ class CompleteUserDataProvider with ChangeNotifier {
   }
 
   Future<void> uploadAvatar() async {
-    uploadingAvatar = true;
+    loading = true;
     String userId = AuthProvider.getCurrentUserUid();
     String storagePath = 'users/$userId/avatar.jpg';
 
@@ -50,16 +50,20 @@ class CompleteUserDataProvider with ChangeNotifier {
     String avatarUrl = await downloadUrl.ref.getDownloadURL();
 
     dbUser.avatar = avatarUrl;
-    uploadingAvatar = false;
+    loading = false;
   }
 
   Future<void> addUserToFirestore() async {
-    uploadingAvatar = true;
+    loading = true;
     String userId = AuthProvider.getCurrentUserUid();
+    String userEmail = AuthProvider.getCurrentUserEmail();
+
+    dbUser.email = userEmail;
+
     await FirebaseFirestore.instance
         .collection("users")
         .doc(userId)
         .set(dbUser.toJson());
-    uploadingAvatar = false;
+    loading = false;
   }
 }
