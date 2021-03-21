@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_firebase_chat/models/chat.dart';
 import 'package:flutter_firebase_chat/models/message.dart';
-import 'package:flutter_firebase_chat/providers/auth_provider.dart';
 import 'package:flutter_firebase_chat/providers/chats_provider.dart';
-import 'package:flutter_firebase_chat/ui/screens/chats/chat/widgets/sent_message.dart';
+import 'package:flutter_firebase_chat/utils/functions.dart';
 import 'package:provider/provider.dart';
 
 import 'widgets/appbar.dart';
 import 'widgets/chat_input.dart';
-import 'widgets/received_message.dart';
+import 'widgets/message_day_divider.dart';
+import 'widgets/message_item.dart';
 
 class ChatScreen extends StatefulWidget {
   static final String route = "/ChatScreen";
@@ -32,7 +31,26 @@ class _ChatScreenState extends State<ChatScreen> {
               reverse: true,
               itemCount: messages.length,
               itemBuilder: (context, index) {
-                return MessageItem(messages[index]);
+                Message currentMessage = messages[index];
+
+                List<Widget> widgets = [MessageItem(messages[index])];
+
+                if (index < messages.length - 1) {
+                  bool differentDays = false;
+                  Message nextMessage = messages[index + 1];
+
+                  differentDays = Functions.messagesAreDifferentDays(
+                      nextMessage, currentMessage);
+
+                  if (differentDays)
+                    widgets.insert(0, MessageDayDivider(currentMessage));
+                } else if (index == messages.length - 1) {
+                  widgets.insert(0, MessageDayDivider(currentMessage));
+                }
+
+                return Column(
+                  children: widgets,
+                );
               },
             ),
           ),
@@ -40,17 +58,5 @@ class _ChatScreenState extends State<ChatScreen> {
         ],
       ),
     );
-  }
-}
-
-class MessageItem extends StatelessWidget {
-  MessageItem(this.message);
-  final Message message;
-  @override
-  Widget build(BuildContext context) {
-    if (message.from == AuthProvider.getCurrentUserUid())
-      return SentMessage(message: message);
-    else
-      return ReceivedMessage(message: message);
   }
 }

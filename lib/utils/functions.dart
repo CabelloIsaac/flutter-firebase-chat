@@ -1,0 +1,43 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_firebase_chat/models/message.dart';
+import 'package:intl/intl.dart';
+
+class Functions {
+  static String getMessageTime(Timestamp timestamp) {
+    DateTime dateTime = timestamp.toDate();
+    final DateFormat formatter = DateFormat('dd MMM hh:mm a');
+    final String formatted = formatter.format(dateTime);
+    return formatted;
+  }
+
+  static String getMessageDate(Timestamp timestamp) {
+    DateTime dateTime = timestamp.toDate();
+    final DateFormat formatter = DateFormat("dd 'de' MMM");
+    final String formatted = formatter.format(dateTime);
+    return formatted;
+  }
+
+  static bool messagesAreDifferentDays(Message first, Message second) {
+    DateTime firstDateTime = first.timestamp.toDate();
+    DateTime secondDateTime = second.timestamp.toDate();
+
+    int firstDay = firstDateTime.day;
+    int firstMonth = firstDateTime.month;
+    int firstYear = firstDateTime.year;
+
+    print("First: $firstDay/$firstMonth/$firstYear");
+
+    int secondDay = secondDateTime.day;
+    int secondMonth = secondDateTime.month;
+    int secondYear = secondDateTime.year;
+
+    print("First: $secondDay/$secondMonth/$secondYear");
+
+    if (firstYear != secondYear) return true;
+    if (firstYear == secondYear && firstMonth != secondMonth) return true;
+    if (firstYear == secondYear &&
+        firstMonth == secondMonth &&
+        firstDay != secondDay) return true;
+    return false;
+  }
+}

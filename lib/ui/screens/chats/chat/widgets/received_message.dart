@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_chat/models/message.dart';
+import 'package:flutter_firebase_chat/utils/functions.dart';
 
 class ReceivedMessage extends StatelessWidget {
   const ReceivedMessage({
@@ -32,15 +33,17 @@ class ReceivedMessage extends StatelessWidget {
                 message.body,
                 textAlign: TextAlign.start,
               ),
-              Expanded(child: Container()),
+              // Expanded(child: Container()),
               Align(
                 alignment: Alignment.bottomRight,
                 child: Padding(
                   padding: EdgeInsets.only(top: 6, left: 6),
-                  child: Text(
-                    "12:22 pm",
-                    style: TextStyle(fontSize: 10),
-                  ),
+                  child: message.timestamp != null
+                      ? Text(
+                          "${Functions.getMessageTime(message.timestamp)}",
+                          style: TextStyle(fontSize: 10),
+                        )
+                      : Icon(Icons.access_time_rounded),
                 ),
               ),
             ],
