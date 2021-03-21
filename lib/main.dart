@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_firebase_chat/providers/auth_provider.dart';
 import 'package:flutter_firebase_chat/providers/complete_user_data_provider.dart';
 import 'package:provider/provider.dart';
@@ -10,6 +11,12 @@ import 'utils/constants.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  final SystemUiOverlayStyle mySystemTheme =
+      SystemUiOverlayStyle.light.copyWith(
+    statusBarColor: Colors.transparent,
+    statusBarIconBrightness: Brightness.dark,
+  );
+  SystemChrome.setSystemUIOverlayStyle(mySystemTheme);
   await Firebase.initializeApp();
   runApp(MyApp());
 }
@@ -23,17 +30,18 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => CompleteUserDataProvider()),
       ],
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: Constants.APP_NAME,
         routes: Routes.routes,
         home: AuthScreensManager(),
         theme: ThemeData(
+          primaryColor: Colors.white,
+          brightness: Brightness.light,
+          primaryColorBrightness: Brightness.light,
           appBarTheme: AppBarTheme(
-            elevation: 0,
+            color: Colors.white,
             brightness: Brightness.light,
-            backgroundColor: Colors.white,
-            iconTheme: IconThemeData(
-              color: Colors.black,
-            ),
+            elevation: 0.0,
           ),
           scaffoldBackgroundColor: Colors.white,
           elevatedButtonTheme: ElevatedButtonThemeData(
