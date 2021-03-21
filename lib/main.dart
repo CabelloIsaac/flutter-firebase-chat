@@ -24,6 +24,15 @@ class MyApp extends StatelessWidget {
         title: Constants.APP_NAME,
         routes: Routes.routes,
         home: AuthScreensManager(),
+        theme: ThemeData(
+          appBarTheme: AppBarTheme(color: Colors.white, elevation: 0),
+          scaffoldBackgroundColor: Colors.white,
+          elevatedButtonTheme: ElevatedButtonThemeData(
+            style: ElevatedButton.styleFrom(
+              padding: EdgeInsets.all(20),
+            ),
+          ),
+        ),
       ),
     );
   }

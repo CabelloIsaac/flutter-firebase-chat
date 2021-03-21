@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_chat/models/db_user.dart';
 import 'package:flutter_firebase_chat/providers/auth_provider.dart';
+import 'package:flutter_firebase_chat/ui/screens/auth/complete_user_data/complete_user_data_screen.dart';
+import 'package:flutter_firebase_chat/ui/screens/chats/list/chats_screen.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -8,15 +10,15 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final _authProvider = Provider.of<AuthProvider>(context);
     final bool loadingDBUserData = _authProvider.loadingDBUserData;
-    final DBUser dbUser = _authProvider.dbUser;
+    final bool userExists = _authProvider.userExists;
 
     if (loadingDBUserData) {
       return Scaffold(body: Center(child: CircularProgressIndicator()));
     } else {
-      if (dbUser == null) {
-        return Text("User doesn't exists");
+      if (userExists) {
+        return ChatsScreen();
       } else {
-        return Text("Name is: ${dbUser.name}");
+        return CompleteUserDataScreen();
       }
     }
   }

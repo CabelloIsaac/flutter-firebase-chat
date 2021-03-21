@@ -12,6 +12,7 @@ class AuthProvider with ChangeNotifier {
   static const String WEAK_PASSWORD_ERROR = "weak-password";
 
   bool _loadingDBUserData = true;
+  bool _userExists = false;
   FirebaseAuth _auth;
   User _firebaseUser;
   Status _status = Status.Uninitialized;
@@ -22,12 +23,18 @@ class AuthProvider with ChangeNotifier {
     _auth.authStateChanges().listen(_onAuthStateChanged);
   }
 
+  bool get userExists => _userExists;
   bool get loadingDBUserData => _loadingDBUserData;
   Status get status => _status;
   User get firebaseUser => _firebaseUser;
   FirebaseAuth get auth => _auth;
   ErrorMessage get errorMessage => _errorMessage;
   DBUser get dbUser => _dbUser;
+
+  set userExists(bool value) {
+    _userExists = value;
+    notifyListeners();
+  }
 
   set loadingDBUserData(bool value) {
     _loadingDBUserData = value;
@@ -113,14 +120,15 @@ class AuthProvider with ChangeNotifier {
           .doc(firebaseUser.uid)
           .snapshots()
           .listen((documentSnapshot) {
-        if (documentSnapshot.exists) {
+        userExists = documentSnapshot.exists;
+        if (userExists) {
           print("The user does exists in the db");
           dbUser = DBUser.fromJson(documentSnapshot.data());
         } else {
           print("The user doesnt exists in the db");
           dbUser = null;
         }
-        _loadingDBUserData = false;
+        loadingDBUserData = false;
       });
     }
   }
