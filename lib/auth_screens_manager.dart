@@ -3,7 +3,7 @@ import 'package:flutter_firebase_chat/ui/screens/chats/list/chats_screen.dart';
 import 'package:provider/provider.dart';
 
 import 'providers/auth_provider.dart';
-import 'ui/screens/login/login_screen.dart';
+import 'ui/screens/auth/login/login_screen.dart';
 
 class AuthScreensManager extends StatelessWidget {
   @override

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'ui/screens/login/login_screen.dart';
+import 'ui/screens/auth/login/login_screen.dart';
 
 class Routes {
   static final routes = {
