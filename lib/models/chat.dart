@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 Chat chatFromJson(String str) => Chat.fromJson(json.decode(str));
 
 String chatToJson(Chat data) => json.encode(data.toJson());
@@ -43,7 +45,7 @@ class LastMessage {
 
   String from;
   String body;
-  int timestamp;
+  Timestamp timestamp;
 
   factory LastMessage.fromJson(Map<String, dynamic> json) => LastMessage(
         from: json["from"],
