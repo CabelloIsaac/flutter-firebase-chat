@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
           scaffoldBackgroundColor: Colors.white,
           elevatedButtonTheme: ElevatedButtonThemeData(
             style: ElevatedButton.styleFrom(
-              padding: EdgeInsets.all(20),
+              padding: EdgeInsets.all(15),
             ),
           ),
         ),

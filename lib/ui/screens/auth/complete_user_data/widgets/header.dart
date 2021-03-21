@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_firebase_chat/ui/widgets/title_text.dart';
 
 class Header extends StatelessWidget {
   const Header({
@@ -10,13 +11,7 @@ class Header extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          "¿Cómo te llamas?",
-          style: TextStyle(
-            fontSize: 30,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
+        TitleText("¿Cómo te llamas?"),
         SizedBox(height: 20),
         Text("Introduce tu nombre y tu apellido."),
       ],
