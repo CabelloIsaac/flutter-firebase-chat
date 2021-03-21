@@ -11,8 +11,6 @@ class ProfilePicture extends StatefulWidget {
 }
 
 class _ProfilePictureState extends State<ProfilePicture> {
-  File _avatar;
-  final picker = ImagePicker();
   AuthProvider _authProvider;
   @override
   Widget build(BuildContext context) {
@@ -35,32 +33,53 @@ class _ProfilePictureState extends State<ProfilePicture> {
                     : Container(),
             backgroundImage: avatar == null ? null : NetworkImage(avatar),
           ),
-          Positioned(
-            bottom: 0,
-            right: 0,
-            child: GestureDetector(
-              onTap: _getImage,
-              child: Container(
-                padding: EdgeInsets.all(9),
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Colors.white,
-                    width: 2.0,
-                  ),
-                  color: Color.fromRGBO(229, 229, 229, 1.0),
-                  borderRadius: BorderRadius.circular(
-                    50.0,
-                  ),
-                ),
-                child: Icon(
-                  Icons.camera_alt,
-                  size: 25.0,
-                  color: Colors.black,
-                ),
-              ),
+          GalleryPictureSelector(),
+        ],
+      ),
+    );
+  }
+}
+
+class GalleryPictureSelector extends StatefulWidget {
+  const GalleryPictureSelector({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  _GalleryPictureSelectorState createState() => _GalleryPictureSelectorState();
+}
+
+class _GalleryPictureSelectorState extends State<GalleryPictureSelector> {
+  final picker = ImagePicker();
+
+  AuthProvider _authProvider;
+
+  @override
+  Widget build(BuildContext context) {
+    _authProvider = Provider.of<AuthProvider>(context);
+    return Positioned(
+      bottom: 0,
+      right: 0,
+      child: GestureDetector(
+        onTap: _getImage,
+        child: Container(
+          padding: EdgeInsets.all(9),
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: Colors.white,
+              width: 2.0,
+            ),
+            color: Color.fromRGBO(229, 229, 229, 1.0),
+            borderRadius: BorderRadius.circular(
+              50.0,
             ),
           ),
-        ],
+          child: Icon(
+            Icons.camera_alt,
+            size: 25.0,
+            color: Colors.black,
+          ),
+        ),
       ),
     );
   }

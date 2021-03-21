@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'widgets/change_user_name.dart';
 import 'widgets/dark_mode.dart';
 import 'widgets/profile_picture.dart';
 import 'widgets/sign_out.dart';
@@ -25,6 +26,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
               UserName(),
               SizedBox(height: 40),
               DarkMode(),
+              ChangeUserName(),
               SignOut(),
             ],
           ),
