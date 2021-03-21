@@ -34,6 +34,7 @@ class SentImage extends StatelessWidget {
                 child: Image.network(
                   message.body,
                   height: (screenWidth / 2) - 20,
+                  width: screenWidth / 2,
                   fit: BoxFit.cover,
                 ),
               ),

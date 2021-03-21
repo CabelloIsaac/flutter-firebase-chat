@@ -35,17 +35,19 @@ class _ChatScreenState extends State<ChatScreen> {
 
                 List<Widget> widgets = [MessageItem(messages[index])];
 
-                if (index < messages.length - 1) {
-                  bool differentDays = false;
-                  Message nextMessage = messages[index + 1];
+                if (currentMessage.timestamp != null) {
+                  if (index < messages.length - 1) {
+                    bool differentDays = false;
+                    Message nextMessage = messages[index + 1];
 
-                  differentDays = Functions.messagesAreDifferentDays(
-                      nextMessage, currentMessage);
+                    differentDays = Functions.messagesAreDifferentDays(
+                        nextMessage, currentMessage);
 
-                  if (differentDays)
+                    if (differentDays)
+                      widgets.insert(0, MessageDayDivider(currentMessage));
+                  } else if (index == messages.length - 1) {
                     widgets.insert(0, MessageDayDivider(currentMessage));
-                } else if (index == messages.length - 1) {
-                  widgets.insert(0, MessageDayDivider(currentMessage));
+                  }
                 }
 
                 return Column(
