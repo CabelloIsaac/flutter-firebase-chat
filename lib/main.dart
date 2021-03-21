@@ -7,6 +7,7 @@ import 'package:flutter_firebase_chat/providers/complete_user_data_provider.dart
 import 'package:provider/provider.dart';
 
 import 'auth_screens_manager.dart';
+import 'providers/users_provider.dart';
 import 'routes.dart';
 import 'utils/constants.dart';
 
@@ -30,6 +31,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => AuthProvider.instance()),
         ChangeNotifierProvider(create: (_) => CompleteUserDataProvider()),
         ChangeNotifierProvider(create: (_) => ChatsProvider()),
+        ChangeNotifierProvider(create: (_) => UsersProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

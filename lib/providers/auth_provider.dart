@@ -130,7 +130,10 @@ class AuthProvider with ChangeNotifier {
         userExists = documentSnapshot.exists;
         if (userExists) {
           print("The user does exists in the db");
-          dbUser = DBUser.fromJson(documentSnapshot.data());
+          dbUser = DBUser.fromJson(
+            id: documentSnapshot.id,
+            data: documentSnapshot.data(),
+          );
         } else {
           print("The user doesnt exists in the db");
           dbUser = null;

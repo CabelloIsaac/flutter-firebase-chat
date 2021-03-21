@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_chat/models/chat.dart';
 import 'package:flutter_firebase_chat/providers/chats_provider.dart';
+import 'package:flutter_firebase_chat/ui/screens/chats/new/new_chat_screen.dart';
 import 'package:provider/provider.dart';
 
 import 'widgets/appbar.dart';
@@ -23,7 +24,8 @@ class ChatsScreen extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          chatsProvider.createTestChat();
+          // chatsProvider.createTestChat();
+          Navigator.pushNamed(context, NewChatScreen.route);
         },
         label: Text("Iniciar chat"),
         icon: Icon(Icons.edit),
