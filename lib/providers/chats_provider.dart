@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_firebase_chat/models/chat.dart';
@@ -6,7 +8,10 @@ import 'package:flutter_firebase_chat/providers/auth_provider.dart';
 class ChatsProvider with ChangeNotifier {
   List<Chat> _chats = [];
   Chat _chat;
-  bool _chatsListeningIsOn = false;
+  bool _isListeningAllChats = false;
+  bool _isListeningSingleChat = false;
+  StreamSubscription<QuerySnapshot> _chatsSnapshots;
+  StreamSubscription<DocumentSnapshot> _chatSnapshots;
 
   List<Chat> get chats => _chats;
   Chat get chat => _chat;
@@ -17,21 +22,45 @@ class ChatsProvider with ChangeNotifier {
   }
 
   set chat(Chat value) {
+    if (chat == null || chat.id != value.id) {
+      if (_chatSnapshots != null) _chatSnapshots.cancel();
+      _isListeningSingleChat = false;
+    }
     _chat = value;
+    loadChat();
     notifyListeners();
   }
 
   void loadChats() {
-    if (!_chatsListeningIsOn) {
+    print("loadChats");
+    if (!_isListeningAllChats) {
+      print("_isListeningAllChats = false");
       String userId = AuthProvider.getCurrentUserUid();
-      FirebaseFirestore.instance
+      _chatsSnapshots = FirebaseFirestore.instance
           .collection("chats")
           .where("participants", arrayContains: userId)
           .snapshots()
           .listen((documents) {
-        chats = documents.docs.map((e) => Chat.fromJson(e.data())).toList();
+        chats = documents.docs
+            .map((e) => Chat.fromJson(id: e.id, data: e.data()))
+            .toList();
       });
-      _chatsListeningIsOn = true;
+      _isListeningAllChats = true;
+    }
+  }
+
+  void loadChat() {
+    print("loadChat");
+    if (!_isListeningSingleChat) {
+      print("_isListeningSingleChat = false");
+      _chatSnapshots = FirebaseFirestore.instance
+          .collection("chats")
+          .doc(chat.id)
+          .snapshots()
+          .listen((document) {
+        chat = Chat.fromJson(id: document.id, data: document.data());
+      });
+      _isListeningSingleChat = true;
     }
   }
 
@@ -54,6 +83,7 @@ class ChatsProvider with ChangeNotifier {
         "from": userId,
         "body": "Este es el ultimo mensaje",
         "timestamp": FieldValue.serverTimestamp(),
+        "type": "text",
       }
     });
   }

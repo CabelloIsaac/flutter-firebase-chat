@@ -2,23 +2,26 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Chat {
   Chat({
+    this.id,
     this.type,
     this.participants,
     this.participantsData,
     this.lastMessage,
   });
 
+  String id;
   String type;
   List<String> participants;
   List<ParticipantsData> participantsData;
   LastMessage lastMessage;
 
-  factory Chat.fromJson(Map<String, dynamic> json) => Chat(
-        type: json["type"],
-        participants: List<String>.from(json["participants"].map((x) => x)),
+  factory Chat.fromJson({String id = "", Map<String, dynamic> data}) => Chat(
+        id: id,
+        type: data["type"],
+        participants: List<String>.from(data["participants"].map((x) => x)),
         participantsData: List<ParticipantsData>.from(
-            json["participantsData"].map((x) => ParticipantsData.fromJson(x))),
-        lastMessage: LastMessage.fromJson(json["lastMessage"]),
+            data["participantsData"].map((x) => ParticipantsData.fromJson(x))),
+        lastMessage: LastMessage.fromJson(data["lastMessage"]),
       );
 
   Map<String, dynamic> toJson() => {
