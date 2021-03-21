@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_firebase_chat/models/db_user.dart';
 import 'package:flutter_firebase_chat/models/error_message.dart';
@@ -135,5 +138,24 @@ class AuthProvider with ChangeNotifier {
         loadingDBUserData = false;
       });
     }
+  }
+
+  Future<void> uploadAvatar(File avatar) async {
+    loadingDBUserData = true;
+    String userId = AuthProvider.getCurrentUserUid();
+    String storagePath = 'users/$userId/avatar.jpg';
+    Reference storageReference =
+        FirebaseStorage.instance.ref().child(storagePath);
+    UploadTask uploadTask = storageReference.putFile(avatar);
+    TaskSnapshot downloadUrl = await uploadTask.whenComplete(() => null);
+    String avatarUrl = await downloadUrl.ref.getDownloadURL();
+    dbUser.avatar = avatarUrl;
+
+    FirebaseFirestore.instance
+        .collection("users")
+        .doc(userId)
+        .update(dbUser.toJson());
+
+    loadingDBUserData = false;
   }
 }
