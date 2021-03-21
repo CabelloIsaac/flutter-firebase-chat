@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_chat/providers/auth_provider.dart';
+import 'package:flutter_firebase_chat/ui/screens/me/my_profile.dart';
 import 'package:flutter_firebase_chat/ui/widgets/title_text.dart';
 import 'package:provider/provider.dart';
 
@@ -20,7 +21,9 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
                     _authProvider.dbUser.avatar,
                   ),
                 ),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pushNamed(context, MyProfileScreen.route);
+          },
         ),
       ],
     );
