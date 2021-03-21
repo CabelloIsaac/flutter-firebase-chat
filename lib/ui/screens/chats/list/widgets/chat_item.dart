@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_chat/models/chat.dart';
 import 'package:flutter_firebase_chat/providers/auth_provider.dart';
+import 'package:flutter_firebase_chat/providers/chats_provider.dart';
+import 'package:flutter_firebase_chat/ui/screens/chats/chat/chat_screen.dart';
 import 'package:provider/provider.dart';
 
 class ChatItem extends StatelessWidget {
@@ -8,7 +10,7 @@ class ChatItem extends StatelessWidget {
   final Chat chat;
   @override
   Widget build(BuildContext context) {
-    final _authProvider = Provider.of<AuthProvider>(context);
+    final chatProvider = Provider.of<ChatsProvider>(context);
 
     bool chatHasValidPicture = _chatHasValidPicture();
     String chatPicture = getChatPicture();
@@ -21,7 +23,10 @@ class ChatItem extends StatelessWidget {
       ),
       title: Text(getChatName()),
       subtitle: Text(getLastMessageBody()),
-      onTap: () {},
+      onTap: () {
+        chatProvider.chat = chat;
+        Navigator.pushNamed(context, ChatScreen.route);
+      },
     );
   }
 
