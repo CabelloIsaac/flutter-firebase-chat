@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_chat/models/chat.dart';
+import 'package:flutter_firebase_chat/models/message.dart';
 import 'package:flutter_firebase_chat/providers/auth_provider.dart';
 import 'package:flutter_firebase_chat/providers/chats_provider.dart';
+import 'package:flutter_firebase_chat/ui/screens/chats/chat/widgets/sent_message.dart';
 import 'package:provider/provider.dart';
 
 import 'widgets/appbar.dart';
 import 'widgets/chat_input.dart';
+import 'widgets/received_message.dart';
 
 class ChatScreen extends StatefulWidget {
   static final String route = "/ChatScreen";
@@ -15,11 +18,10 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   ChatsProvider _chatsProvider;
-  Chat _chat;
   @override
   Widget build(BuildContext context) {
     _chatsProvider = Provider.of<ChatsProvider>(context);
-    _chat = _chatsProvider.chat;
+    final messages = _chatsProvider.messages;
 
     return Scaffold(
       appBar: MyAppBar(),
@@ -27,9 +29,10 @@ class _ChatScreenState extends State<ChatScreen> {
         children: [
           Expanded(
             child: ListView.builder(
-              itemCount: 22,
+              reverse: true,
+              itemCount: messages.length,
               itemBuilder: (context, index) {
-                return Text("Hola");
+                return MessageItem(messages[index]);
               },
             ),
           ),
@@ -37,5 +40,17 @@ class _ChatScreenState extends State<ChatScreen> {
         ],
       ),
     );
+  }
+}
+
+class MessageItem extends StatelessWidget {
+  MessageItem(this.message);
+  final Message message;
+  @override
+  Widget build(BuildContext context) {
+    if (message.from == AuthProvider.getCurrentUserUid())
+      return SentMessage(message: message);
+    else
+      return ReceivedMessage(message: message);
   }
 }

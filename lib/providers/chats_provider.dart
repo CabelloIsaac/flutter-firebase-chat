@@ -3,18 +3,23 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_firebase_chat/models/chat.dart';
+import 'package:flutter_firebase_chat/models/message.dart';
 import 'package:flutter_firebase_chat/providers/auth_provider.dart';
 
 class ChatsProvider with ChangeNotifier {
   List<Chat> _chats = [];
   Chat _chat;
+  List<Message> _messages = [];
   bool _isListeningAllChats = false;
   bool _isListeningSingleChat = false;
-  StreamSubscription<QuerySnapshot> _chatsSnapshots;
-  StreamSubscription<DocumentSnapshot> _chatSnapshots;
+  bool _isListeningMessages = false;
+  StreamSubscription<QuerySnapshot> _chatsSubscription;
+  StreamSubscription<QuerySnapshot> _messagesSubscription;
+  StreamSubscription<DocumentSnapshot> _chatSubscription;
 
   List<Chat> get chats => _chats;
   Chat get chat => _chat;
+  List<Message> get messages => _messages;
 
   set chats(List<Chat> value) {
     _chats = value;
@@ -23,11 +28,17 @@ class ChatsProvider with ChangeNotifier {
 
   set chat(Chat value) {
     if (chat == null || chat.id != value.id) {
-      if (_chatSnapshots != null) _chatSnapshots.cancel();
+      if (_chatSubscription != null) _chatSubscription.cancel();
       _isListeningSingleChat = false;
     }
     _chat = value;
     loadChat();
+    loadChatMessages();
+    notifyListeners();
+  }
+
+  set messages(List<Message> value) {
+    _messages = value;
     notifyListeners();
   }
 
@@ -36,7 +47,7 @@ class ChatsProvider with ChangeNotifier {
     if (!_isListeningAllChats) {
       print("_isListeningAllChats = false");
       String userId = AuthProvider.getCurrentUserUid();
-      _chatsSnapshots = FirebaseFirestore.instance
+      _chatsSubscription = FirebaseFirestore.instance
           .collection("chats")
           .where("participants", arrayContains: userId)
           .snapshots()
@@ -53,7 +64,7 @@ class ChatsProvider with ChangeNotifier {
     print("loadChat");
     if (!_isListeningSingleChat) {
       print("_isListeningSingleChat = false");
-      _chatSnapshots = FirebaseFirestore.instance
+      _chatSubscription = FirebaseFirestore.instance
           .collection("chats")
           .doc(chat.id)
           .snapshots()
@@ -61,6 +72,25 @@ class ChatsProvider with ChangeNotifier {
         chat = Chat.fromJson(id: document.id, data: document.data());
       });
       _isListeningSingleChat = true;
+    }
+  }
+
+  void loadChatMessages() {
+    print("loadChatMessages");
+    if (!_isListeningMessages) {
+      print("_isListeningMessages = false");
+      _chatsSubscription = FirebaseFirestore.instance
+          .collection("chats")
+          .doc(chat.id)
+          .collection("messages")
+          .orderBy("timestamp", descending: true)
+          .snapshots()
+          .listen((documents) {
+        messages = documents.docs
+            .map((e) => Message.fromJson(id: e.id, data: e.data()))
+            .toList();
+      });
+      _isListeningMessages = true;
     }
   }
 
@@ -86,5 +116,16 @@ class ChatsProvider with ChangeNotifier {
         "type": "text",
       }
     });
+  }
+
+  void sendTextMessage(Message message) {
+    print("Sending message");
+    Map<String, dynamic> messageMap = message.toJson();
+    messageMap["timestamp"] = FieldValue.serverTimestamp();
+    FirebaseFirestore.instance
+        .collection("chats")
+        .doc(chat.id)
+        .collection("messages")
+        .add(messageMap);
   }
 }

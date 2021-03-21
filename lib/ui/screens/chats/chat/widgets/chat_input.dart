@@ -1,12 +1,27 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_firebase_chat/models/message.dart';
+import 'package:flutter_firebase_chat/providers/auth_provider.dart';
+import 'package:flutter_firebase_chat/providers/chats_provider.dart';
+import 'package:provider/provider.dart';
 
-class ChatInput extends StatelessWidget {
+class ChatInput extends StatefulWidget {
   const ChatInput({
     Key key,
   }) : super(key: key);
 
   @override
+  _ChatInputState createState() => _ChatInputState();
+}
+
+class _ChatInputState extends State<ChatInput> {
+  ChatsProvider _chatsProvider;
+  TextEditingController _controller = TextEditingController();
+
+  @override
   Widget build(BuildContext context) {
+    _chatsProvider = Provider.of<ChatsProvider>(context);
+
     return Container(
       padding: EdgeInsets.all(5),
       child: Row(
@@ -23,6 +38,7 @@ class ChatInput extends StatelessWidget {
           ),
           Expanded(
             child: TextField(
+              controller: _controller,
               textCapitalization: TextCapitalization.sentences,
               maxLines: 4,
               minLines: 1,
@@ -42,10 +58,24 @@ class ChatInput extends StatelessWidget {
           IconButton(
             color: Colors.blue,
             icon: Icon(Icons.send),
-            onPressed: () {},
+            onPressed: _sendMessage,
           )
         ],
       ),
     );
+  }
+
+  void _sendMessage() {
+    String body = _controller.text.trim();
+    if (_controller.text.trim().isNotEmpty) {
+      Message message = Message(
+        body: body,
+        from: AuthProvider.getCurrentUserUid(),
+        type: "text",
+      );
+
+      _chatsProvider.sendTextMessage(message);
+      _controller.clear();
+    }
   }
 }
