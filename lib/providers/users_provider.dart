@@ -23,10 +23,9 @@ class UsersProvider with ChangeNotifier {
 
   void loadUsers() {
     if (!_isListening) {
-      String userId = AuthProvider.getCurrentUserUid();
       FirebaseFirestore.instance
-          .collection("chats")
-          .where("participants", arrayContains: userId)
+          .collection("users")
+          .orderBy("name")
           .snapshots()
           .listen((documents) {
         users = documents.docs
