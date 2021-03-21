@@ -27,7 +27,14 @@ class MyApp extends StatelessWidget {
         routes: Routes.routes,
         home: AuthScreensManager(),
         theme: ThemeData(
-          appBarTheme: AppBarTheme(color: Colors.white, elevation: 0),
+          appBarTheme: AppBarTheme(
+            elevation: 0,
+            brightness: Brightness.light,
+            backgroundColor: Colors.white,
+            iconTheme: IconThemeData(
+              color: Colors.black,
+            ),
+          ),
           scaffoldBackgroundColor: Colors.white,
           elevatedButtonTheme: ElevatedButtonThemeData(
             style: ElevatedButton.styleFrom(
