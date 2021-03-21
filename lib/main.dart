@@ -35,7 +35,6 @@ class MyApp extends StatelessWidget {
         routes: Routes.routes,
         home: AuthScreensManager(),
         theme: ThemeData(
-          primaryColor: Colors.white,
           brightness: Brightness.light,
           primaryColorBrightness: Brightness.light,
           appBarTheme: AppBarTheme(

@@ -158,4 +158,14 @@ class AuthProvider with ChangeNotifier {
 
     loadingDBUserData = false;
   }
+
+  void changeUserName(String name, String lastName) {
+    String userId = AuthProvider.getCurrentUserUid();
+    dbUser.name = name;
+    dbUser.lastName = lastName;
+    FirebaseFirestore.instance
+        .collection("users")
+        .doc(userId)
+        .update(dbUser.toJson());
+  }
 }
