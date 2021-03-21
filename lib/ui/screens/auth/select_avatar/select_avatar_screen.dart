@@ -46,13 +46,11 @@ class _SelectAvatarScreenState extends State<SelectAvatarScreen> {
                       onTap: _getImage,
                       child: CircleAvatar(
                         radius: 100,
-                        child: _avatar == null
-                            ? Icon(
-                                Icons.camera_alt,
-                                size: 75,
-                              )
-                            : Container(),
-                        backgroundImage:
+                        child: Icon(
+                          Icons.camera_alt,
+                          size: 75,
+                        ),
+                        foregroundImage:
                             _avatar == null ? null : FileImage(_avatar),
                       ),
                     ),
