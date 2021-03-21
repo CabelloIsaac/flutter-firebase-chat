@@ -8,7 +8,7 @@ class ChatsScreen extends StatelessWidget {
     final _authProvider = Provider.of<AuthProvider>(context);
     return Container(
       child: Column(children: [
-        Text(_authProvider.user.uid.toString()),
+        Text(_authProvider.firebaseUser.uid.toString()),
         ElevatedButton(
             onPressed: () {
               _authProvider.signOut();

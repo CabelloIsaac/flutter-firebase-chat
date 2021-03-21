@@ -1,6 +1,7 @@
-import 'package:firebase_auth/firebase_auth.dart' as firebase;
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_firebase_chat/models/db_user.dart';
 import 'package:flutter_firebase_chat/models/error_message.dart';
 
 enum Status { Uninitialized, Authenticated, Authenticating, Unauthenticated }
@@ -10,19 +11,28 @@ class AuthProvider with ChangeNotifier {
   static const String WRONG_PASSWORD_ERROR = "wrong-password";
   static const String WEAK_PASSWORD_ERROR = "weak-password";
 
-  firebase.FirebaseAuth _auth;
-  firebase.User _user;
+  bool _loadingDBUserData = true;
+  FirebaseAuth _auth;
+  User _firebaseUser;
   Status _status = Status.Uninitialized;
   ErrorMessage _errorMessage;
+  DBUser _dbUser;
 
-  AuthProvider.instance() : _auth = firebase.FirebaseAuth.instance {
+  AuthProvider.instance() : _auth = FirebaseAuth.instance {
     _auth.authStateChanges().listen(_onAuthStateChanged);
   }
 
+  bool get loadingDBUserData => _loadingDBUserData;
   Status get status => _status;
-  firebase.User get user => _user;
-  firebase.FirebaseAuth get auth => _auth;
+  User get firebaseUser => _firebaseUser;
+  FirebaseAuth get auth => _auth;
   ErrorMessage get errorMessage => _errorMessage;
+  DBUser get dbUser => _dbUser;
+
+  set loadingDBUserData(bool value) {
+    _loadingDBUserData = value;
+    notifyListeners();
+  }
 
   set status(Status value) {
     _status = value;
@@ -34,18 +44,23 @@ class AuthProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  set dbUser(DBUser value) {
+    _dbUser = value;
+    notifyListeners();
+  }
+
   Future<void> signInWithEmailAndPassword(String email, String password) async {
     try {
       status = Status.Authenticating;
       await _auth.signInWithEmailAndPassword(email: email, password: password);
       errorMessage = ErrorMessage(error: false);
     } on FirebaseAuthException catch (e) {
-      status = Status.Unauthenticated;
       errorMessage =
           ErrorMessage(code: e.code, message: e.message, error: true);
-
       if (e.code == USER_NOT_FOUND_ERROR) {
         signUp(email, password);
+      } else {
+        status = Status.Unauthenticated;
       }
     }
   }
@@ -73,19 +88,40 @@ class AuthProvider with ChangeNotifier {
     return Future.delayed(Duration.zero);
   }
 
-  Future<void> _onAuthStateChanged(firebase.User firebaseUser) async {
+  Future<void> _onAuthStateChanged(User value) async {
     print("_onAuthStateChanged");
-    if (firebaseUser == null) {
+    if (value == null) {
       _status = Status.Unauthenticated;
     } else {
-      _user = firebaseUser;
+      _firebaseUser = value;
       _status = Status.Authenticated;
+      _listenToUserDataChanges();
     }
     print("firebaseUser == null: ${firebaseUser == null}");
     notifyListeners();
   }
 
   static String getCurrentUserUid() {
-    return firebase.FirebaseAuth.instance.currentUser.uid;
+    return FirebaseAuth.instance.currentUser.uid;
+  }
+
+  void _listenToUserDataChanges() {
+    print("_listenToUserDataChanges");
+    if (_firebaseUser != null) {
+      FirebaseFirestore.instance
+          .collection('users')
+          .doc(firebaseUser.uid)
+          .snapshots()
+          .listen((documentSnapshot) {
+        if (documentSnapshot.exists) {
+          print("The user does exists in the db");
+          dbUser = DBUser.fromJson(documentSnapshot.data());
+        } else {
+          print("The user doesnt exists in the db");
+          dbUser = null;
+        }
+        _loadingDBUserData = false;
+      });
+    }
   }
 }
