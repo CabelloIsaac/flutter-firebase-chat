@@ -30,13 +30,17 @@ dependencies:
   cupertino_icons: ^1.0.2
   email_validator: ^2.0.1
   provider: ^5.0.0
-  image_picker: ^0.7.3
-  intl: ^0.17.0
+  image_picker: ^0.6.7+22
+  intl: ^0.16.1
+  # permission_handler: ^6.1.1
+  audioplayers: ^0.17.0
+  flutter_audio_recorder: ^0.5.5
+  path_provider: ^1.6.28
   # Firebase
-  firebase_core: ^1.0.1
-  firebase_auth: ^1.0.1
-  cloud_firestore: ^1.0.1
-  firebase_storage: ^8.0.0
+  firebase_core: ^0.7.0
+  firebase_auth: ^0.20.1
+  cloud_firestore: ^0.16.0+1
+  firebase_storage: ^7.0.0
   
 dev_dependencies:
   flutter_test:

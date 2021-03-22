@@ -33,7 +33,9 @@ class _ChatInputState extends State<ChatInput> {
           IconButton(
             color: Colors.blue,
             icon: Icon(Icons.keyboard_voice),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushNamed(context, "record");
+            },
           ),
           IconButton(
             color: Colors.blue,

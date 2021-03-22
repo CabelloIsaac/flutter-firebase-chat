@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'record.dart';
 import 'ui/screens/auth/login/login_screen.dart';
 import 'ui/screens/auth/select_avatar/select_avatar_screen.dart';
 import 'ui/screens/change_user_name/change_user_name_screen.dart';
@@ -16,5 +17,6 @@ class Routes {
         ChangeUserNameScreen(),
     NewChatScreen.route: (BuildContext context) => NewChatScreen(),
     ChatScreen.route: (BuildContext context) => ChatScreen(),
+    "record": (BuildContext context) => SimpleRecorder(),
   };
 }
