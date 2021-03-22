@@ -19,7 +19,7 @@ class SentImage extends StatelessWidget {
         alignment: Alignment.bottomRight,
         child: Container(
           // padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-          width: screenWidth / 2,
+          width: screenWidth * 0.7,
           decoration: BoxDecoration(
             color: Colors.blue,
             borderRadius: BorderRadius.circular(20),
@@ -33,8 +33,7 @@ class SentImage extends StatelessWidget {
                 ),
                 child: Image.network(
                   message.body,
-                  height: (screenWidth / 2) - 20,
-                  width: screenWidth / 2,
+                  width: screenWidth * 0.7,
                   fit: BoxFit.cover,
                 ),
               ),
