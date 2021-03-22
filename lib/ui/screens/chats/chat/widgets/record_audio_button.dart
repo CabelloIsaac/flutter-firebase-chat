@@ -40,23 +40,11 @@ class _RecordAudioButtonState extends State<RecordAudioButton> {
   @override
   void initState() {
     super.initState();
-
     FlutterAudioRecorder.hasPermissions.then((hasPermision) {
       if (hasPermision) {
         _recordingState = RecordingState.Set;
         _recordIcon = Icons.mic;
       }
-    });
-
-    records = [];
-    getApplicationDocumentsDirectory().then((value) {
-      appDirectory = value;
-      appDirectory.list().listen((onData) {
-        records.add(onData.path);
-      }).onDone(() {
-        records = records.reversed.toList();
-        setState(() {});
-      });
     });
   }
 
@@ -74,6 +62,7 @@ class _RecordAudioButtonState extends State<RecordAudioButton> {
       color: Colors.blue,
       icon: Icon(_recordIcon),
       onPressed: () async {
+        // Navigator.pushNamed(context, "record");
         await _onRecordButtonPressed();
         setState(() {});
       },

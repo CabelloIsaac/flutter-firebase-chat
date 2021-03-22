@@ -17,18 +17,21 @@ class AudioMessage extends StatefulWidget {
 }
 
 class _AudioMessageState extends State<AudioMessage> {
-  final player = AudioPlayer();
-  void initAudio() async {
-    print(message.body);
-    try {
-      var duration = await player.setUrl(message.body);
-      // player.play();
-    } catch (e) {
-      print(e);
-    }
+  AudioPlayer audioPlayer = AudioPlayer();
+  bool _isPlaying = false;
+  bool _isPaused = false;
+
+  double _completedPercentage = 0.0;
+  int _totalDuration;
+  int _currentDuration;
+  Message message;
+
+  @override
+  void dispose() {
+    audioPlayer.stop().then((value) => audioPlayer.release());
+    super.dispose();
   }
 
-  Message message;
   @override
   Widget build(BuildContext context) {
     message = widget.message;
@@ -41,7 +44,6 @@ class _AudioMessageState extends State<AudioMessage> {
         ? Theme.of(context).scaffoldBackgroundColor
         : Theme.of(context).primaryTextTheme.bodyText1.color;
 
-    initAudio();
     return Container(
       margin: EdgeInsets.fromLTRB(10, 0, 10, 5),
       child: Align(
@@ -60,19 +62,29 @@ class _AudioMessageState extends State<AudioMessage> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Expanded(
-                    child: LinearProgressIndicator(
-                      minHeight: 5,
-                      backgroundColor: Colors.black,
-                      valueColor: AlwaysStoppedAnimation<Color>(textColor),
-                      value: 1,
+                    child: Slider(
+                      activeColor: Colors.black,
+                      inactiveColor: Colors.white,
+                      max: _totalDuration != null
+                          ? _totalDuration.toDouble()
+                          : 0,
+                      value: _currentDuration != null
+                          ? _currentDuration.toDouble()
+                          : 0,
+                      min: 0,
+                      onChanged: (value) {
+                        audioPlayer.seek(Duration(microseconds: value.toInt()));
+                      },
+                      onChangeEnd: (value) {
+                        print(value);
+                      },
                     ),
                   ),
                   IconButton(
-                    icon: Icon(Icons.play_arrow, color: textColor),
-                    onPressed: () async {
-                      await player.release();
-                      await player.play(message.body);
-                    },
+                    icon: !_isPlaying || _isPaused
+                        ? Icon(Icons.play_arrow)
+                        : Icon(Icons.pause),
+                    onPressed: _play,
                   ),
                 ],
               ),
@@ -82,6 +94,51 @@ class _AudioMessageState extends State<AudioMessage> {
         ),
       ),
     );
+  }
+
+  Future<void> _play() async {
+    if (!_isPlaying) {
+      audioPlayer = AudioPlayer();
+      audioPlayer.play(message.body);
+      setState(() => _isPlaying = true);
+
+      audioPlayer.onPlayerCompletion.listen((_) {
+        setState(() {
+          _isPlaying = false;
+          _completedPercentage = 0.0;
+        });
+      });
+
+      audioPlayer.onDurationChanged.listen((duration) {
+        setState(() {
+          _totalDuration = duration.inMicroseconds;
+        });
+      });
+
+      audioPlayer.onAudioPositionChanged.listen((duration) {
+        setState(() {
+          _currentDuration = duration.inMicroseconds;
+          _completedPercentage =
+              _currentDuration.toDouble() / _totalDuration.toDouble() * 100;
+          print(_completedPercentage);
+        });
+      });
+
+      audioPlayer.onNotificationPlayerStateChanged.listen((event) {
+        print(event);
+        if (event == AudioPlayerState.PAUSED) {
+          print("paused");
+        }
+      });
+    } else {
+      if (_isPaused) {
+        audioPlayer.resume();
+        setState(() => _isPaused = false);
+      } else {
+        audioPlayer.pause();
+        setState(() => _isPaused = true);
+      }
+    }
   }
 }
 
