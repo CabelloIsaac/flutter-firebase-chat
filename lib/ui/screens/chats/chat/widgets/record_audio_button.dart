@@ -5,6 +5,7 @@ import 'package:flutter_audio_recorder/flutter_audio_recorder.dart';
 import 'package:flutter_firebase_chat/models/message.dart';
 import 'package:flutter_firebase_chat/providers/auth_provider.dart';
 import 'package:flutter_firebase_chat/providers/chats_provider.dart';
+import 'package:flutter_firebase_chat/providers/message_input_provider.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -17,17 +18,9 @@ class RecordAudioButton extends StatefulWidget {
   _RecordAudioButtonState createState() => _RecordAudioButtonState();
 }
 
-enum RecordingState {
-  UnSet,
-  Set,
-  Recording,
-  Stopped,
-}
-
 class _RecordAudioButtonState extends State<RecordAudioButton> {
   IconData _recordIcon = Icons.mic;
   Color _buttonColor = Colors.blue;
-  RecordingState _recordingState = RecordingState.UnSet;
 
   Directory appDirectory;
   Stream<FileSystemEntity> fileStream;
@@ -37,29 +30,35 @@ class _RecordAudioButtonState extends State<RecordAudioButton> {
   FlutterAudioRecorder audioRecorder;
 
   ChatsProvider _chatsProvider;
+  MessageInputProvider _messageInputProvider;
 
-  @override
-  void initState() {
-    super.initState();
-    _buttonColor = Theme.of(context).primaryColor;
-    FlutterAudioRecorder.hasPermissions.then((hasPermision) {
-      if (hasPermision) {
-        _recordingState = RecordingState.Set;
-        _recordIcon = Icons.mic;
-      }
-    });
-  }
+  bool _isRecorderSet = false;
 
   @override
   void dispose() {
-    _recordingState = RecordingState.UnSet;
+    _messageInputProvider.recordingState = RecordingState.UnSet;
     audioRecorder = null;
     super.dispose();
+  }
+
+  void initAudioRecorder() {
+    if (!_isRecorderSet) {
+      _buttonColor = Theme.of(context).primaryColor;
+      FlutterAudioRecorder.hasPermissions.then((hasPermision) {
+        if (hasPermision) {
+          _messageInputProvider.recordingState = RecordingState.Set;
+          _recordIcon = Icons.mic;
+        }
+      });
+      _isRecorderSet = true;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     _chatsProvider = Provider.of<ChatsProvider>(context);
+    _messageInputProvider = Provider.of<MessageInputProvider>(context);
+    initAudioRecorder();
     return IconButton(
       color: _buttonColor,
       icon: Icon(_recordIcon),
@@ -72,7 +71,7 @@ class _RecordAudioButtonState extends State<RecordAudioButton> {
   }
 
   Future<void> _onRecordButtonPressed() async {
-    switch (_recordingState) {
+    switch (_messageInputProvider.recordingState) {
       case RecordingState.Set:
         await _recordVoice();
         break;
@@ -81,7 +80,7 @@ class _RecordAudioButtonState extends State<RecordAudioButton> {
         await _stopRecording();
 
         setState(() {
-          _recordingState = RecordingState.Stopped;
+          _messageInputProvider.recordingState = RecordingState.Stopped;
           _recordIcon = Icons.mic;
           _buttonColor = Theme.of(context).primaryColor;
         });
@@ -130,7 +129,7 @@ class _RecordAudioButtonState extends State<RecordAudioButton> {
       await _startRecording();
 
       setState(() {
-        _recordingState = RecordingState.Recording;
+        _messageInputProvider.recordingState = RecordingState.Recording;
         _recordIcon = Icons.stop;
         _buttonColor = Colors.red;
       });

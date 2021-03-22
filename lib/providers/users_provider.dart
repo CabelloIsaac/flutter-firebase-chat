@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_firebase_chat/models/db_user.dart';
-import 'package:flutter_firebase_chat/providers/auth_provider.dart';
 
 class UsersProvider with ChangeNotifier {
   List<DBUser> _users = [];
