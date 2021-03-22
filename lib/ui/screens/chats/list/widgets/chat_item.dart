@@ -61,8 +61,8 @@ class ChatItem extends StatelessWidget {
     if (chat.lastMessage.type == "text") {
       if (_isLoggedUser(chat.lastMessage.from)) {
         lastMessage += "Tú: ";
-        return lastMessage += chat.lastMessage.body;
       }
+      return lastMessage += chat.lastMessage.body;
     } else if (chat.lastMessage.type == "image") {
       if (_isLoggedUser(chat.lastMessage.from)) {
         lastMessage += "Tú: ";
