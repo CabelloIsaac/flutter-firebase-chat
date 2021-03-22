@@ -21,6 +21,8 @@ class MessageItem extends StatelessWidget {
         return SentImage(message: message);
       else
         return ReceivedMessage(message: message);
+    } else {
+      return Text(message.body);
     }
   }
 }

@@ -8,6 +8,8 @@ import 'package:flutter_firebase_chat/providers/chats_provider.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
+import 'record_audio_button.dart';
+
 class ChatInput extends StatefulWidget {
   const ChatInput({
     Key key,
@@ -32,13 +34,6 @@ class _ChatInputState extends State<ChatInput> {
         children: [
           IconButton(
             color: Colors.blue,
-            icon: Icon(Icons.keyboard_voice),
-            onPressed: () {
-              Navigator.pushNamed(context, "record");
-            },
-          ),
-          IconButton(
-            color: Colors.blue,
             icon: Icon(Icons.camera_alt),
             onPressed: () {
               _getImage();
@@ -51,6 +46,7 @@ class _ChatInputState extends State<ChatInput> {
               maxLines: 4,
               minLines: 1,
               textInputAction: TextInputAction.newline,
+              onChanged: (s) => setState(() => {}),
               decoration: InputDecoration(
                 filled: true,
                 isCollapsed: true,
@@ -63,11 +59,13 @@ class _ChatInputState extends State<ChatInput> {
               ),
             ),
           ),
-          IconButton(
-            color: Colors.blue,
-            icon: Icon(Icons.send),
-            onPressed: _sendMessage,
-          )
+          _controller.text.trim().isNotEmpty
+              ? IconButton(
+                  color: Colors.blue,
+                  icon: Icon(Icons.send),
+                  onPressed: _sendMessage,
+                )
+              : RecordAudioButton(),
         ],
       ),
     );

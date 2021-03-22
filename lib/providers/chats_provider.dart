@@ -132,16 +132,27 @@ class ChatsProvider with ChangeNotifier {
     Map<String, dynamic> messageMap = message.toJson();
     messageMap["timestamp"] = FieldValue.serverTimestamp();
 
-    String url = await uploadFile(image);
+    String url = await uploadFile(image, "images", "jpg");
     messageMap["body"] = url;
 
     _addMessageToChat(messageMap);
   }
 
-  Future<String> uploadFile(File file) async {
+  void sendAudioMessage(Message message, File audio) async {
+    print("Sending message");
+    Map<String, dynamic> messageMap = message.toJson();
+    messageMap["timestamp"] = FieldValue.serverTimestamp();
+
+    String url = await uploadFile(audio, "audio", "aac");
+    messageMap["body"] = url;
+
+    _addMessageToChat(messageMap);
+  }
+
+  Future<String> uploadFile(File file, String type, String ext) async {
     String userId = AuthProvider.getCurrentUserUid();
     int timestamp = DateTime.now().millisecondsSinceEpoch;
-    String storagePath = 'chats/${chat.id}/$userId-$timestamp.jpg';
+    String storagePath = 'chats/${chat.id}/$type/$userId-$timestamp.$ext';
     Reference storageReference =
         FirebaseStorage.instance.ref().child(storagePath);
     UploadTask uploadTask = storageReference.putFile(file);
