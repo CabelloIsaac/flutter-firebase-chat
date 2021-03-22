@@ -17,6 +17,6 @@ class Routes {
         ChangeUserNameScreen(),
     NewChatScreen.route: (BuildContext context) => NewChatScreen(),
     ChatScreen.route: (BuildContext context) => ChatScreen(),
-    "record": (BuildContext context) => SimpleRecorder(),
+    "record": (BuildContext context) => RecorderHomeView(title: "asdasd"),
   };
 }
