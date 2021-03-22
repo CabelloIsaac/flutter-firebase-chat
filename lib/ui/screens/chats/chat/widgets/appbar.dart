@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_firebase_chat/models/chat.dart';
 import 'package:flutter_firebase_chat/providers/auth_provider.dart';
 import 'package:flutter_firebase_chat/providers/chats_provider.dart';
-import 'package:flutter_firebase_chat/ui/screens/me/my_profile.dart';
-import 'package:flutter_firebase_chat/ui/widgets/title_text.dart';
 import 'package:provider/provider.dart';
 
 class MyAppBar extends StatefulWidget implements PreferredSizeWidget {

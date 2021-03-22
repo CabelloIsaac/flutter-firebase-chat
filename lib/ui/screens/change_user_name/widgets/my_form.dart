@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_firebase_chat/models/db_user.dart';
 import 'package:flutter_firebase_chat/providers/auth_provider.dart';
-import 'package:flutter_firebase_chat/providers/complete_user_data_provider.dart';
-import 'package:flutter_firebase_chat/ui/screens/auth/select_avatar/select_avatar_screen.dart';
 import 'package:provider/provider.dart';
 
 class MyForm extends StatefulWidget {
