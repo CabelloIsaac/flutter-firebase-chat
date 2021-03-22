@@ -161,11 +161,18 @@ class ChatsProvider with ChangeNotifier {
     return url;
   }
 
-  void _addMessageToChat(Map<String, dynamic> messageMap) {
-    FirebaseFirestore.instance
+  void _addMessageToChat(Map<String, dynamic> messageMap) async {
+    await FirebaseFirestore.instance
         .collection("chats")
         .doc(chat.id)
         .collection("messages")
         .add(messageMap);
+    _updateLastMessageOnChat(messageMap);
+  }
+
+  void _updateLastMessageOnChat(messageMap) {
+    FirebaseFirestore.instance.collection("chats").doc(chat.id).update({
+      "lastMessage": messageMap,
+    });
   }
 }

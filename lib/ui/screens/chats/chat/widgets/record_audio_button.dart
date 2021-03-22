@@ -135,24 +135,10 @@ class _RecordAudioButtonState extends State<RecordAudioButton> {
       await _startRecording();
       _recordingState = RecordingState.Recording;
       _recordIcon = Icons.stop;
-    } else {
-      Scaffold.of(context).hideCurrentSnackBar();
-      Scaffold.of(context).showSnackBar(SnackBar(
-        content: Text('Please allow recording from settings.'),
-      ));
     }
   }
 
   _onRecordComplete() {
-    // records.clear();
-    // appDirectory.list().listen((onData) {
-    //   records.add(onData.path);
-    // }).onDone(() {
-    //   records.sort();
-    //   records = records.reversed.toList();
-    //   print(records.first);
-
-    // });
     Message message = Message(
       body: filePath,
       from: AuthProvider.getCurrentUserUid(),
