@@ -26,6 +26,7 @@ enum RecordingState {
 
 class _RecordAudioButtonState extends State<RecordAudioButton> {
   IconData _recordIcon = Icons.mic;
+  Color _buttonColor = Colors.blue;
   RecordingState _recordingState = RecordingState.UnSet;
 
   Directory appDirectory;
@@ -40,6 +41,7 @@ class _RecordAudioButtonState extends State<RecordAudioButton> {
   @override
   void initState() {
     super.initState();
+    _buttonColor = Theme.of(context).primaryColor;
     FlutterAudioRecorder.hasPermissions.then((hasPermision) {
       if (hasPermision) {
         _recordingState = RecordingState.Set;
@@ -59,7 +61,7 @@ class _RecordAudioButtonState extends State<RecordAudioButton> {
   Widget build(BuildContext context) {
     _chatsProvider = Provider.of<ChatsProvider>(context);
     return IconButton(
-      color: Colors.blue,
+      color: _buttonColor,
       icon: Icon(_recordIcon),
       onPressed: () async {
         // Navigator.pushNamed(context, "record");
@@ -77,8 +79,12 @@ class _RecordAudioButtonState extends State<RecordAudioButton> {
 
       case RecordingState.Recording:
         await _stopRecording();
-        _recordingState = RecordingState.Stopped;
-        _recordIcon = Icons.mic;
+
+        setState(() {
+          _recordingState = RecordingState.Stopped;
+          _recordIcon = Icons.mic;
+          _buttonColor = Theme.of(context).primaryColor;
+        });
         break;
 
       case RecordingState.Stopped:
@@ -122,8 +128,12 @@ class _RecordAudioButtonState extends State<RecordAudioButton> {
       await _initRecorder();
 
       await _startRecording();
-      _recordingState = RecordingState.Recording;
-      _recordIcon = Icons.stop;
+
+      setState(() {
+        _recordingState = RecordingState.Recording;
+        _recordIcon = Icons.stop;
+        _buttonColor = Colors.red;
+      });
     }
   }
 
