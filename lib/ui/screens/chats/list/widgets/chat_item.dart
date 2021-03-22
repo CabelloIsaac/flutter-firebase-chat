@@ -57,10 +57,34 @@ class ChatItem extends StatelessWidget {
 
   String getLastMessageBody() {
     String lastMessage = "";
-    if (_isLoggedUser(chat.lastMessage.from)) {
-      lastMessage += "Tú: ";
+
+    if (chat.lastMessage.type == "text") {
+      if (_isLoggedUser(chat.lastMessage.from)) {
+        lastMessage += "Tú: ";
+        return lastMessage += chat.lastMessage.body;
+      }
+    } else if (chat.lastMessage.type == "image") {
+      if (_isLoggedUser(chat.lastMessage.from)) {
+        lastMessage += "Tú: ";
+        return lastMessage += "Enviaste una foto";
+      } else {
+        return "Envió una foto";
+      }
+    } else if (chat.lastMessage.type == "audio") {
+      if (_isLoggedUser(chat.lastMessage.from)) {
+        lastMessage += "Tú: ";
+        return lastMessage += "Enviaste un audio";
+      } else {
+        return "Envió un audio";
+      }
+    } else {
+      if (_isLoggedUser(chat.lastMessage.from)) {
+        lastMessage += "Tú: ";
+        return lastMessage += "Enviaste un mensje";
+      } else {
+        return "Envió un mensaje";
+      }
     }
-    return lastMessage += chat.lastMessage.body;
   }
 
   bool _isLoggedUser(String id) {

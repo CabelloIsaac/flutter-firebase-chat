@@ -38,22 +38,26 @@ class LastMessage {
     this.from,
     this.body,
     this.timestamp,
+    this.type,
   });
 
   String from;
   String body;
   Timestamp timestamp;
+  String type;
 
   factory LastMessage.fromJson(Map<String, dynamic> json) => LastMessage(
         from: json["from"],
         body: json["body"],
         timestamp: json["timestamp"],
+        type: json["type"],
       );
 
   Map<String, dynamic> toJson() => {
         "from": from,
         "body": body,
         "timestamp": timestamp,
+        "type": type,
       };
 }
 
