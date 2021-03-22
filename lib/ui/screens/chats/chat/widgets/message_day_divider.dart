@@ -13,7 +13,8 @@ class MessageDayDivider extends StatelessWidget {
       margin: EdgeInsets.only(bottom: 5),
       padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       decoration: BoxDecoration(
-          color: Colors.grey, borderRadius: BorderRadius.circular(10)),
+          color: Colors.grey.withOpacity(0.5),
+          borderRadius: BorderRadius.circular(10)),
       child: Text("${Functions.getMessageDate(message.timestamp)}"),
     );
   }
