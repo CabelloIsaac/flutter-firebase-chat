@@ -12,13 +12,16 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
       title: TitleText("Chats"),
       actions: [
         IconButton(
-          icon: CircleAvatar(
-            foregroundImage: _authProvider.dbUser.avatar != null
-                ? NetworkImage(
-                    _authProvider.dbUser.avatar,
-                  )
-                : null,
-            child: Icon(Icons.person),
+          icon: Hero(
+            tag: _authProvider.dbUser.avatar,
+            child: CircleAvatar(
+              foregroundImage: _authProvider.dbUser.avatar != null
+                  ? NetworkImage(
+                      _authProvider.dbUser.avatar,
+                    )
+                  : null,
+              child: Icon(Icons.person),
+            ),
           ),
           onPressed: () {
             Navigator.pushNamed(context, MyProfileScreen.route);

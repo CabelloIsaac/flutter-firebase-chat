@@ -21,17 +21,20 @@ class _ProfilePictureState extends State<ProfilePicture> {
       padding: const EdgeInsets.only(left: 20, top: 20, right: 20),
       child: Stack(
         children: [
-          CircleAvatar(
-            radius: 55,
-            child: loading
-                ? CircularProgressIndicator()
-                : avatar == null
-                    ? Icon(
-                        Icons.person,
-                        size: 50,
-                      )
-                    : Container(),
-            backgroundImage: avatar == null ? null : NetworkImage(avatar),
+          Hero(
+            tag: avatar,
+            child: CircleAvatar(
+              radius: 55,
+              child: loading
+                  ? CircularProgressIndicator()
+                  : avatar == null
+                      ? Icon(
+                          Icons.person,
+                          size: 50,
+                        )
+                      : Container(),
+              backgroundImage: avatar == null ? null : NetworkImage(avatar),
+            ),
           ),
           GalleryPictureSelector(),
         ],
