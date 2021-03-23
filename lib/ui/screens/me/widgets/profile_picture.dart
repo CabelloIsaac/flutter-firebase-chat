@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_chat/providers/auth_provider.dart';
+import 'package:flutter_firebase_chat/ui/screens/image_detail/image_detail_screen.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
@@ -23,17 +24,23 @@ class _ProfilePictureState extends State<ProfilePicture> {
         children: [
           Hero(
             tag: avatar,
-            child: CircleAvatar(
-              radius: 55,
-              child: loading
-                  ? CircularProgressIndicator()
-                  : avatar == null
-                      ? Icon(
-                          Icons.person,
-                          size: 50,
-                        )
-                      : Container(),
-              backgroundImage: avatar == null ? null : NetworkImage(avatar),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.pushNamed(context, ImageDetailScreen.route,
+                    arguments: avatar);
+              },
+              child: CircleAvatar(
+                radius: 55,
+                child: loading
+                    ? CircularProgressIndicator()
+                    : avatar == null
+                        ? Icon(
+                            Icons.person,
+                            size: 50,
+                          )
+                        : Container(),
+                backgroundImage: avatar == null ? null : NetworkImage(avatar),
+              ),
             ),
           ),
           GalleryPictureSelector(),

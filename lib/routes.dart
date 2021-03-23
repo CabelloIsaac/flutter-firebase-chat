@@ -6,6 +6,7 @@ import 'ui/screens/change_user_name/change_user_name_screen.dart';
 import 'ui/screens/chats/chat/chat_screen.dart';
 import 'ui/screens/chats/new/new_chat_screen.dart';
 import 'ui/screens/me/my_profile.dart';
+import 'ui/screens/image_detail/image_detail_screen.dart';
 
 class Routes {
   static final routes = {
@@ -16,5 +17,6 @@ class Routes {
         ChangeUserNameScreen(),
     NewChatScreen.route: (BuildContext context) => NewChatScreen(),
     ChatScreen.route: (BuildContext context) => ChatScreen(),
+    ImageDetailScreen.route: (BuildContext context) => ImageDetailScreen(),
   };
 }
