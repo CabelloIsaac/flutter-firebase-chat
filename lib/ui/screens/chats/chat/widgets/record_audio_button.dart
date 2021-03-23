@@ -8,6 +8,7 @@ import 'package:flutter_firebase_chat/providers/chats_provider.dart';
 import 'package:flutter_firebase_chat/providers/message_input_provider.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class RecordAudioButton extends StatefulWidget {
   const RecordAudioButton({
@@ -44,12 +45,19 @@ class _RecordAudioButtonState extends State<RecordAudioButton> {
   void initAudioRecorder() {
     if (!_isRecorderSet) {
       _buttonColor = Theme.of(context).primaryColor;
-      FlutterAudioRecorder.hasPermissions.then((hasPermision) {
-        if (hasPermision) {
-          _messageInputProvider.recordingState = RecordingState.Set;
-          _recordIcon = Icons.mic;
-        }
-      });
+
+      if (!kIsWeb) {
+        FlutterAudioRecorder.hasPermissions.then((hasPermision) {
+          if (hasPermision) {
+            _messageInputProvider.recordingState = RecordingState.Set;
+            _recordIcon = Icons.mic;
+          }
+        });
+      } else {
+        _messageInputProvider.recordingState = RecordingState.Set;
+        _recordIcon = Icons.mic;
+      }
+
       _isRecorderSet = true;
     }
   }
