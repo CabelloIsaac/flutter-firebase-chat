@@ -18,18 +18,23 @@ import 'utils/constants.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final SystemUiOverlayStyle mySystemTheme =
-      SystemUiOverlayStyle.light.copyWith(
-    statusBarColor: Colors.transparent,
-    statusBarIconBrightness: Brightness.dark,
-  );
-  SystemChrome.setSystemUIOverlayStyle(mySystemTheme);
+  setStatusBarTransparent();
   await Firebase.initializeApp();
   await _initHive();
   runApp(MyApp());
 }
 
-/// Inicializa el Hive
+void setStatusBarTransparent() {
+  if (!kIsWeb) {
+    final SystemUiOverlayStyle mySystemTheme =
+        SystemUiOverlayStyle.light.copyWith(
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: Brightness.dark,
+    );
+    SystemChrome.setSystemUIOverlayStyle(mySystemTheme);
+  }
+}
+
 Future<void> _initHive() async {
   if (kIsWeb) {
     Hive.init(null);
