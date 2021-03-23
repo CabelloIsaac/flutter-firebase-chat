@@ -27,19 +27,35 @@ class _MyFormState extends State<MyForm> {
             controller: _controllerEmail,
             validator: _validatorEmail,
             autovalidateMode: AutovalidateMode.onUserInteraction,
-            decoration: InputDecoration(labelText: "Correo electrónico"),
+            keyboardType: TextInputType.emailAddress,
+            decoration: InputDecoration(
+              prefixIcon: Icon(Icons.email),
+              hintText: "Correo electrónico",
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(25),
+                borderSide: BorderSide.none,
+              ),
+              filled: true,
+            ),
           ),
+          SizedBox(height: 10),
           TextFormField(
             controller: _controllerPassword,
             validator: _validatorPassword,
             autovalidateMode: AutovalidateMode.onUserInteraction,
             decoration: InputDecoration(
-              labelText: "Contraseña",
+              prefixIcon: Icon(Icons.lock),
+              hintText: "Contraseña",
               suffixIcon: IconButton(
                 icon: Icon(
                     _obscurePassword ? Icons.visibility_off : Icons.visibility),
                 onPressed: _showOrHidePassord,
               ),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(25),
+                borderSide: BorderSide.none,
+              ),
+              filled: true,
             ),
             obscureText: _obscurePassword,
           ),

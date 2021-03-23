@@ -95,6 +95,7 @@ class MyApp extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: new BorderRadius.circular(20.0),
           ),
+          elevation: 0,
           padding: EdgeInsets.symmetric(vertical: 16.0),
         ),
       ),
@@ -119,6 +120,7 @@ class MyApp extends StatelessWidget {
       accentColor: Colors.blue.shade400,
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
+          elevation: 0,
           shape: RoundedRectangleBorder(
             borderRadius: new BorderRadius.circular(20.0),
           ),
