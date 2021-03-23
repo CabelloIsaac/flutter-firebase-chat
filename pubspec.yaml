@@ -32,7 +32,7 @@ dependencies:
   provider: ^5.0.0
   image_picker: ^0.6.7+22
   intl: ^0.16.1
-  # permission_handler: ^6.1.1
+  hive: ^1.4.4+1
   audioplayers: ^0.17.0
   flutter_audio_recorder: ^0.5.5
   path_provider: ^1.6.28
