@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 class Functions {
   static String getMessageTime(Timestamp timestamp) {
     DateTime dateTime = timestamp.toDate();
-    final DateFormat formatter = DateFormat('dd MMM hh:mm a');
+    final DateFormat formatter = DateFormat('hh:mm a');
     final String formatted = formatter.format(dateTime);
     return formatted;
   }
@@ -25,13 +25,9 @@ class Functions {
     int firstMonth = firstDateTime.month;
     int firstYear = firstDateTime.year;
 
-    print("First: $firstDay/$firstMonth/$firstYear");
-
     int secondDay = secondDateTime.day;
     int secondMonth = secondDateTime.month;
     int secondYear = secondDateTime.year;
-
-    print("First: $secondDay/$secondMonth/$secondYear");
 
     if (firstYear != secondYear) return true;
     if (firstYear == secondYear && firstMonth != secondMonth) return true;
@@ -43,12 +39,10 @@ class Functions {
 
   static String generateChatIdFromParticipants(List<String> participants) {
     String result = participants[0] + participants[1];
-    print("Before: $result");
     participants.sort((a, b) {
       return a.toLowerCase().compareTo(b.toLowerCase());
     });
     result = participants[0] + "-" + participants[1];
-    print("After: $result");
     return result;
   }
 }
