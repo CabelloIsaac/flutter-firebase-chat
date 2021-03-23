@@ -45,6 +45,8 @@ class _UserItemState extends State<UserItem> {
 
   void _openChatScreen() {
     Chat chat = _createChatObject();
+
+    print(chat.participants);
     _chatsProvider.chat = chat;
     Navigator.pushNamed(context, ChatScreen.route);
   }
@@ -60,7 +62,7 @@ class _UserItemState extends State<UserItem> {
   List<String> _getListOfParticipantsIds() {
     return [
       widget.user.id,
-      AuthProvider.getCurrentUserUid(),
+      _authProvider.dbUser.id,
     ];
   }
 

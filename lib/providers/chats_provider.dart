@@ -30,12 +30,23 @@ class ChatsProvider with ChangeNotifier {
 
   set chat(Chat value) {
     if (chat == null || chat.id != value.id) {
+      print("Chat has changed to ${value.id}");
       if (_chatSubscription != null) _chatSubscription.cancel();
+      if (_messagesSubscription != null) _messagesSubscription.cancel();
       _isListeningSingleChat = false;
+      _isListeningMessages = false;
+      messages = [];
     }
     _chat = value;
-    loadChat();
-    loadChatMessages();
+
+    if (chat.id != null) {
+      print("We can get chat data");
+      loadChat();
+      loadChatMessages();
+    } else {
+      print("We can not get chat data");
+    }
+
     notifyListeners();
   }
 
@@ -96,30 +107,6 @@ class ChatsProvider with ChangeNotifier {
     }
   }
 
-  void createTestChat() {
-    String userId = AuthProvider.getCurrentUserUid();
-    FirebaseFirestore.instance.collection("chats").add({
-      "type": "chat",
-      "participants": [userId, "id2"],
-      "participantsData": [
-        {"id": userId, "name": "Isaac", "lastName": "Cabello", "avatar": "url"},
-        {
-          "id": "id2",
-          "name": "Dua",
-          "lastName": "Lipa",
-          "avatar":
-              "https://e00-elmundo.uecdn.es/assets/multimedia/imagenes/2021/03/15/16157897316294.jpg"
-        }
-      ],
-      "lastMessage": {
-        "from": userId,
-        "body": "Este es el ultimo mensaje",
-        "timestamp": FieldValue.serverTimestamp(),
-        "type": "text",
-      }
-    });
-  }
-
   void sendTextMessage(Message message) {
     print("Sending message");
     Map<String, dynamic> messageMap = message.toJson();
@@ -162,12 +149,34 @@ class ChatsProvider with ChangeNotifier {
   }
 
   void _addMessageToChat(Map<String, dynamic> messageMap) async {
-    await FirebaseFirestore.instance
-        .collection("chats")
-        .doc(chat.id)
-        .collection("messages")
-        .add(messageMap);
-    _updateLastMessageOnChat(messageMap);
+    if (_chatExists()) {
+      await FirebaseFirestore.instance
+          .collection("chats")
+          .doc(chat.id)
+          .collection("messages")
+          .add(messageMap);
+      _updateLastMessageOnChat(messageMap);
+    } else {
+      print("Chat no existe '${chat.type}'}");
+      await _createNewChat(messageMap);
+    }
+  }
+
+  bool _chatExists() => chat.id != null;
+
+  Future<void> _createNewChat(Map<String, dynamic> messageMap) async {
+    print(chat.participants);
+    _addLastMessageToNewChat(messageMap);
+    final chatRef =
+        await FirebaseFirestore.instance.collection("chats").add(chat.toJson());
+
+    chat.id = chatRef.id;
+    print("Chat created");
+    _addMessageToChat(messageMap);
+  }
+
+  void _addLastMessageToNewChat(Map<String, dynamic> messageMap) {
+    chat.lastMessage = LastMessage();
   }
 
   void _updateLastMessageOnChat(messageMap) {
