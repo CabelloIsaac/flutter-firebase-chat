@@ -222,7 +222,7 @@ class ChatsProvider with ChangeNotifier {
     });
   }
 
-  void emptyChat() {
+  void clearChat() {
     FirebaseFirestore.instance
         .collection("chats")
         .doc(chat.id)

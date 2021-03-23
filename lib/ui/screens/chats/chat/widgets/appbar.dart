@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_firebase_chat/models/chat.dart';
 import 'package:flutter_firebase_chat/providers/auth_provider.dart';
 import 'package:flutter_firebase_chat/providers/chats_provider.dart';
-import 'package:flutter_firebase_chat/ui/screens/home_screen.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter_firebase_chat/ui/screens/image_detail/image_detail_screen.dart';
+import 'package:provider/provider.dart';
 
 class MyAppBar extends StatefulWidget implements PreferredSizeWidget {
   @override
@@ -68,7 +67,7 @@ class _MyAppBarState extends State<MyAppBar> {
   void handleClick(String value) {
     switch (value) {
       case 'Vaciar chat':
-        _chatsProvider.emptyChat();
+        _clearChat();
         break;
       case 'Eliminar chat':
         _deleteChat();
@@ -76,9 +75,60 @@ class _MyAppBarState extends State<MyAppBar> {
     }
   }
 
-  void _deleteChat() {
-    _chatsProvider.deleteChat();
-    Navigator.pop(context);
+  void _clearChat() async {
+    if (await _showConfirmationDialog(
+      "¿Quieres vaciar el chat?",
+      "Esto borrará todos los mensajes en esta conversación, pero no la quitará de tu lista de conversaciones.",
+    )) {
+      _chatsProvider.clearChat();
+    }
+  }
+
+  void _deleteChat() async {
+    if (await _showConfirmationDialog(
+      "¿Quieres borrar el chat?",
+      "Esto borrará todos los mensajes en esta conversación y la quitará de tu lista de conversaciones.",
+    )) {
+      _chatsProvider.deleteChat();
+      Navigator.pop(context);
+    }
+  }
+
+  Future<bool> _showConfirmationDialog(String title, String message) async {
+    final result = await showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          title: Text(title),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(message),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Cancelar'),
+              onPressed: () {
+                Navigator.pop(context, false);
+              },
+            ),
+            TextButton(
+              child: Text('Continuar'),
+              onPressed: () async {
+                Navigator.pop(context, true);
+              },
+            ),
+          ],
+        );
+      },
+    );
+    if (result == null) return false;
+    return result;
   }
 
   bool _chatHasValidPicture() {
