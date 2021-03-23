@@ -37,13 +37,13 @@ class _GetImageButtonState extends State<GetImageButton> {
       builder: (context) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         contentPadding: const EdgeInsets.symmetric(vertical: 16.0),
-        title: Text("Cambiar foto de perfil"),
+        title: Text("Selecciona una imagen"),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             ListTile(
               contentPadding: EdgeInsets.symmetric(horizontal: 24),
-              title: Text('Seleccionar de la galería'),
+              title: Text('Desde la galería'),
               onTap: () => Navigator.pop(context, ImageSource.gallery),
             ),
             ListTile(
@@ -58,7 +58,7 @@ class _GetImageButtonState extends State<GetImageButton> {
     if (imageSource != null) {
       final pickedFile = await picker.getImage(
         source: imageSource,
-        imageQuality: 50,
+        imageQuality: 25,
       );
       if (pickedFile != null) {
         Message message = Message(

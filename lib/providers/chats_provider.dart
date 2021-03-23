@@ -193,4 +193,24 @@ class ChatsProvider with ChangeNotifier {
       "lastMessage": messageMap,
     });
   }
+
+  void deleteChat() {
+    FirebaseFirestore.instance
+        .collection("chats")
+        .doc(chat.id)
+        .collection("messages")
+        .get()
+        .then((messages) {
+      messages.docs.forEach(
+        (message) {
+          message.reference.delete();
+        },
+      );
+      FirebaseFirestore.instance.collection("chats").doc(chat.id).delete();
+    });
+    String storagePath = 'chats/${chat.id}/';
+    // Reference storageReference =
+    //     FirebaseStorage.instance.ref().child(storagePath);
+    // storageReference.delete();
+  }
 }

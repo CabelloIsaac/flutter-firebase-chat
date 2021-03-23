@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_firebase_chat/models/chat.dart';
 import 'package:flutter_firebase_chat/providers/auth_provider.dart';
 import 'package:flutter_firebase_chat/providers/chats_provider.dart';
+import 'package:flutter_firebase_chat/ui/screens/home_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_firebase_chat/ui/screens/image_detail/image_detail_screen.dart';
 
@@ -47,8 +48,36 @@ class _MyAppBarState extends State<MyAppBar> {
             Text(getChatName()),
           ],
         ),
+        actions: [
+          PopupMenuButton<String>(
+            onSelected: handleClick,
+            itemBuilder: (BuildContext context) {
+              return {'Vaciar chat', 'Eliminar chat'}.map((String choice) {
+                return PopupMenuItem<String>(
+                  value: choice,
+                  child: Text(choice),
+                );
+              }).toList();
+            },
+          ),
+        ],
       ),
     );
+  }
+
+  void handleClick(String value) {
+    switch (value) {
+      case 'Vaciar chat':
+        break;
+      case 'Eliminar chat':
+        _deleteChat();
+        break;
+    }
+  }
+
+  void _deleteChat() {
+    _chatsProvider.deleteChat();
+    Navigator.pop(context);
   }
 
   bool _chatHasValidPicture() {
