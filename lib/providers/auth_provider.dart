@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_firebase_chat/models/chat.dart';
 import 'package:flutter_firebase_chat/models/db_user.dart';
 import 'package:flutter_firebase_chat/models/error_message.dart';
 
@@ -160,15 +161,58 @@ class AuthProvider with ChangeNotifier {
         .update(dbUser.toJson());
 
     loadingDBUserData = false;
+    _updateUserDataInChats();
   }
 
   void changeUserName(String name, String lastName) {
-    String userId = AuthProvider.getCurrentUserUid();
     dbUser.name = name;
     dbUser.lastName = lastName;
     FirebaseFirestore.instance
         .collection("users")
-        .doc(userId)
+        .doc(dbUser.id)
         .update(dbUser.toJson());
+    _updateUserDataInChats();
+  }
+
+  void _updateUserDataInChats() {
+    FirebaseFirestore.instance
+        .collection("chats")
+        .where("participants", arrayContains: dbUser.id)
+        .get()
+        .then((documents) {
+      final batch = FirebaseFirestore.instance.batch();
+      List<Chat> chats = documents.docs
+          .map((e) => Chat.fromJson(id: e.id, data: e.data()))
+          .toList();
+
+      chats.forEach((chat) {
+        // Array of usersData
+        List<ParticipantsData> usersData = chat.participantsData;
+
+        // We get the user data object
+        ParticipantsData userData =
+            usersData.where((element) => element.id == dbUser.id).first;
+
+        // We remove the user data object from list
+        usersData.removeWhere((element) => element.id == dbUser.id);
+
+        // Update the user data
+        userData.name = dbUser.name;
+        userData.lastName = dbUser.lastName;
+        userData.avatar = dbUser.avatar;
+
+        // Add the update user data object to list
+        usersData.add(userData);
+
+        // Create the chat document reference
+        final chatRef =
+            FirebaseFirestore.instance.collection("chats").doc(chat.id);
+
+        // Add update task to batch
+        batch.update(chatRef, chat.toJson());
+      });
+
+      batch.commit();
+    });
   }
 }
