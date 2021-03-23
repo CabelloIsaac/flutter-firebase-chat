@@ -7,7 +7,6 @@ import 'package:flutter_firebase_chat/providers/chats_provider.dart';
 import 'package:flutter_firebase_chat/providers/complete_user_data_provider.dart';
 import 'package:flutter_firebase_chat/providers/message_input_provider.dart';
 import 'package:hive/hive.dart';
-import 'package:intl/date_symbol_data_local.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -22,8 +21,6 @@ void main() async {
   setStatusBarTransparent();
   await Firebase.initializeApp();
   await _initHive();
-  await initializeDateFormatting('es_MX');
-  // Intl.
   runApp(MyApp());
 }
 

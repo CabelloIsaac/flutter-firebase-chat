@@ -35,7 +35,7 @@ dependencies:
   hive: ^1.4.4+1
   audioplayers: ^0.17.0
   flutter_audio_recorder: ^0.5.5
-  path_provider: ^1.6.28
+  path_provider: ^1.6.11
   flutter_svg: ^0.19.3
   # Firebase
   firebase_core: ^0.7.0
