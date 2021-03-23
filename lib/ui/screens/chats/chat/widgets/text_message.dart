@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_chat/models/message.dart';
 import 'package:flutter_firebase_chat/providers/auth_provider.dart';
-import 'package:flutter_firebase_chat/utils/functions.dart';
+
+import 'timestamp.dart';
 
 class TextMessage extends StatelessWidget {
   const TextMessage({
@@ -35,28 +36,15 @@ class TextMessage extends StatelessWidget {
             borderRadius: BorderRadius.circular(20),
           ),
           child: Wrap(
-            // alignment: WrapAlignment.end,
             children: [
               Text(
                 message.body,
                 textAlign: TextAlign.start,
                 style: TextStyle(color: textColor),
               ),
-              // Expanded(child: Container()),
-              Align(
-                alignment: Alignment.bottomRight,
-                child: Padding(
-                  padding: EdgeInsets.only(top: 6, left: 6),
-                  child: message.timestamp != null
-                      ? Text(
-                          "${Functions.getMessageTime(message.timestamp)}",
-                          style: TextStyle(fontSize: 11, color: textColor),
-                        )
-                      : Icon(
-                          Icons.access_time_rounded,
-                          color: textColor,
-                        ),
-                ),
+              TimestampIndicator(
+                timestamp: message.timestamp,
+                textColor: textColor,
               ),
             ],
           ),

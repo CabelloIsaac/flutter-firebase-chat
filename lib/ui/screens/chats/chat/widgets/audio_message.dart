@@ -2,7 +2,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_chat/models/message.dart';
 import 'package:flutter_firebase_chat/providers/auth_provider.dart';
-import 'package:flutter_firebase_chat/utils/functions.dart';
+import 'package:flutter_firebase_chat/ui/screens/chats/chat/widgets/timestamp.dart';
 
 class AudioMessage extends StatefulWidget {
   const AudioMessage({
@@ -89,7 +89,10 @@ class _AudioMessageState extends State<AudioMessage> {
                   ),
                 ],
               ),
-              _Timestamp(message: message, textColor: textColor),
+              TimestampIndicator(
+                timestamp: message.timestamp,
+                textColor: textColor,
+              ),
             ],
           ),
         ),
@@ -140,35 +143,5 @@ class _AudioMessageState extends State<AudioMessage> {
         setState(() => _isPaused = true);
       }
     }
-  }
-}
-
-class _Timestamp extends StatelessWidget {
-  const _Timestamp({
-    Key key,
-    @required this.message,
-    @required this.textColor,
-  }) : super(key: key);
-
-  final Message message;
-  final Color textColor;
-
-  @override
-  Widget build(BuildContext context) {
-    return Align(
-      alignment: Alignment.bottomRight,
-      child: Padding(
-        padding: EdgeInsets.only(top: 6, left: 6),
-        child: message.timestamp != null
-            ? Text(
-                "${Functions.getMessageTime(message.timestamp)}",
-                style: TextStyle(fontSize: 11, color: textColor),
-              )
-            : Icon(
-                Icons.access_time_rounded,
-                color: textColor,
-              ),
-      ),
-    );
   }
 }

@@ -3,7 +3,6 @@ import 'package:flutter_firebase_chat/models/chat.dart';
 import 'package:flutter_firebase_chat/providers/chats_provider.dart';
 import 'package:flutter_firebase_chat/ui/screens/chats/new/new_chat_screen.dart';
 import 'package:flutter_firebase_chat/ui/widgets/empty_list_indicator.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
 import 'widgets/appbar.dart';

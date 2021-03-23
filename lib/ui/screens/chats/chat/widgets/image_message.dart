@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_chat/models/message.dart';
 import 'package:flutter_firebase_chat/providers/auth_provider.dart';
-import 'package:flutter_firebase_chat/utils/functions.dart';
+
+import 'timestamp.dart';
 
 class ImageMessage extends StatelessWidget {
   const ImageMessage({
@@ -28,7 +29,6 @@ class ImageMessage extends StatelessWidget {
       child: Align(
         alignment: isSent ? Alignment.bottomRight : Alignment.bottomLeft,
         child: Container(
-          // padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
           width: screenWidth * 0.7,
           decoration: BoxDecoration(
             color: isSent ? sentBackgrounColor : receivedBackgrounColor,
@@ -47,18 +47,9 @@ class ImageMessage extends StatelessWidget {
                   fit: BoxFit.cover,
                 ),
               ),
-              Align(
-                alignment: Alignment.bottomRight,
-                child: Padding(
-                  padding: EdgeInsets.only(top: 6, right: 10, bottom: 10),
-                  child: message.timestamp != null
-                      ? Text(
-                          "${Functions.getMessageTime(message.timestamp)}",
-                          style: TextStyle(fontSize: 11, color: textColor),
-                        )
-                      : Icon(Icons.access_time_rounded,
-                          size: 11, color: textColor),
-                ),
+              TimestampIndicator(
+                timestamp: message.timestamp,
+                textColor: textColor,
               ),
             ],
           ),
