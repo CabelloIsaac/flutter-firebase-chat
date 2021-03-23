@@ -45,7 +45,7 @@ class ChatItem extends StatelessWidget {
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           )),
-          Text(_getLastMessageTimestamp()),
+          Text(Functions.getMessageTimestamp(chat.lastMessage.timestamp)),
         ],
       ),
       onTap: () {
@@ -115,49 +115,5 @@ class ChatItem extends StatelessWidget {
   bool _isLoggedUser(String id) {
     String userId = AuthProvider.getCurrentUserUid();
     return id == userId;
-  }
-
-  String _getLastMessageTimestamp() {
-    if (chat.lastMessage.timestamp == null) return "";
-
-    final DateFormat formatter = DateFormat(null, "es_MX");
-
-    DateTime messageDateTime = chat.lastMessage.timestamp.toDate();
-    DateTime todayDateTime = DateTime.now();
-
-    int messageDay = messageDateTime.day;
-    int messageMonth = messageDateTime.month;
-    int messageYear = messageDateTime.year;
-
-    int todayDay = todayDateTime.day;
-    int todayMonth = todayDateTime.month;
-    int todayYear = todayDateTime.year;
-
-    if (todayYear != messageYear) {
-      formatter.addPattern("dd 'de' MMM 'de' yyyy");
-    }
-
-    if (messageYear == todayYear && messageMonth != todayMonth) {
-      formatter.add_d();
-      formatter.add_MMM();
-    }
-
-    if (messageYear == todayYear &&
-        messageMonth == todayMonth &&
-        messageDay != todayDay) {
-      formatter.add_E();
-      formatter.add_d();
-    }
-
-    if (messageYear == todayYear &&
-        messageMonth == todayMonth &&
-        messageDay == todayDay) {
-      // formatter.add_Hm();
-      formatter.addPattern("hh:mm");
-      formatter.addPattern("a");
-    }
-
-    final String formatted = formatter.format(messageDateTime);
-    return formatted;
   }
 }

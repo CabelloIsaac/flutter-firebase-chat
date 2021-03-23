@@ -11,9 +11,42 @@ class Functions {
   }
 
   static String getMessageDate(Timestamp timestamp) {
-    DateTime dateTime = timestamp.toDate();
-    final DateFormat formatter = DateFormat("dd 'de' MMM");
-    final String formatted = formatter.format(dateTime);
+    if (timestamp == null) return "";
+
+    final DateFormat formatter = DateFormat(null, "es_MX");
+
+    DateTime messageDateTime = timestamp.toDate();
+    DateTime todayDateTime = DateTime.now();
+
+    int messageDay = messageDateTime.day;
+    int messageMonth = messageDateTime.month;
+    int messageYear = messageDateTime.year;
+
+    int todayDay = todayDateTime.day;
+    int todayMonth = todayDateTime.month;
+    int todayYear = todayDateTime.year;
+
+    if (todayYear != messageYear) {
+      formatter.addPattern("dd 'de' MMM 'de' yyyy");
+    }
+
+    if (messageYear == todayYear && messageMonth != todayMonth) {
+      formatter.addPattern("dd 'de' MMM");
+    }
+
+    if (messageYear == todayYear &&
+        messageMonth == todayMonth &&
+        messageDay != todayDay) {
+      formatter.addPattern("E dd");
+    }
+
+    if (messageYear == todayYear &&
+        messageMonth == todayMonth &&
+        messageDay == todayDay) {
+      return "Hoy";
+    }
+
+    final String formatted = formatter.format(messageDateTime);
     return formatted;
   }
 
@@ -44,5 +77,49 @@ class Functions {
     });
     result = participants[0] + "-" + participants[1];
     return result;
+  }
+
+  static String getMessageTimestamp(Timestamp timestamp) {
+    if (timestamp == null) return "";
+
+    final DateFormat formatter = DateFormat(null, "es_MX");
+
+    DateTime messageDateTime = timestamp.toDate();
+    DateTime todayDateTime = DateTime.now();
+
+    int messageDay = messageDateTime.day;
+    int messageMonth = messageDateTime.month;
+    int messageYear = messageDateTime.year;
+
+    int todayDay = todayDateTime.day;
+    int todayMonth = todayDateTime.month;
+    int todayYear = todayDateTime.year;
+
+    if (todayYear != messageYear) {
+      formatter.addPattern("dd 'de' MMM 'de' yyyy");
+    }
+
+    if (messageYear == todayYear && messageMonth != todayMonth) {
+      formatter.add_d();
+      formatter.add_MMM();
+    }
+
+    if (messageYear == todayYear &&
+        messageMonth == todayMonth &&
+        messageDay != todayDay) {
+      formatter.add_E();
+      formatter.add_d();
+    }
+
+    if (messageYear == todayYear &&
+        messageMonth == todayMonth &&
+        messageDay == todayDay) {
+      // formatter.add_Hm();
+      formatter.addPattern("hh:mm");
+      formatter.addPattern("a");
+    }
+
+    final String formatted = formatter.format(messageDateTime);
+    return formatted;
   }
 }
