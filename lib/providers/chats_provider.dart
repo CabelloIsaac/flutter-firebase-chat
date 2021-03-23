@@ -171,12 +171,18 @@ class ChatsProvider with ChangeNotifier {
         await FirebaseFirestore.instance.collection("chats").add(chat.toJson());
 
     chat.id = chatRef.id;
+    chat = chat;
     print("Chat created");
     _addMessageToChat(messageMap);
   }
 
   void _addLastMessageToNewChat(Map<String, dynamic> messageMap) {
-    chat.lastMessage = LastMessage();
+    chat.lastMessage = LastMessage(
+      body: messageMap["body"],
+      from: messageMap["from"],
+      timestamp: Timestamp.now(),
+      type: messageMap["type"],
+    );
   }
 
   void _updateLastMessageOnChat(messageMap) {
