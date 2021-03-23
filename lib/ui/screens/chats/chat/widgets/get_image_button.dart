@@ -32,16 +32,41 @@ class _GetImageButtonState extends State<GetImageButton> {
   }
 
   Future _getImage() async {
-    final pickedFile = await picker.getImage(
-      source: ImageSource.gallery,
-      imageQuality: 50,
+    final imageSource = await showDialog<ImageSource>(
+      context: context,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        contentPadding: const EdgeInsets.symmetric(vertical: 16.0),
+        title: Text("Cambiar foto de perfil"),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            ListTile(
+              contentPadding: EdgeInsets.symmetric(horizontal: 24),
+              title: Text('Seleccionar de la galería'),
+              onTap: () => Navigator.pop(context, ImageSource.gallery),
+            ),
+            ListTile(
+              contentPadding: EdgeInsets.symmetric(horizontal: 24),
+              title: Text('Tomar una foto'),
+              onTap: () => Navigator.pop(context, ImageSource.camera),
+            ),
+          ],
+        ),
+      ),
     );
-    if (pickedFile != null) {
-      Message message = Message(
-        from: AuthProvider.getCurrentUserUid(),
-        type: "image",
+    if (imageSource != null) {
+      final pickedFile = await picker.getImage(
+        source: imageSource,
+        imageQuality: 50,
       );
-      _chatsProvider.sendImageMessage(message, File(pickedFile.path));
+      if (pickedFile != null) {
+        Message message = Message(
+          from: AuthProvider.getCurrentUserUid(),
+          type: "image",
+        );
+        _chatsProvider.sendImageMessage(message, File(pickedFile.path));
+      }
     }
   }
 }
