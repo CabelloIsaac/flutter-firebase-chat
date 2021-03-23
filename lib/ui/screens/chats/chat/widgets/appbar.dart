@@ -68,6 +68,7 @@ class _MyAppBarState extends State<MyAppBar> {
   void handleClick(String value) {
     switch (value) {
       case 'Vaciar chat':
+        _chatsProvider.emptyChat();
         break;
       case 'Eliminar chat':
         _deleteChat();

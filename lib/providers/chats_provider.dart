@@ -213,4 +213,23 @@ class ChatsProvider with ChangeNotifier {
     //     FirebaseStorage.instance.ref().child(storagePath);
     // storageReference.delete();
   }
+
+  void emptyChat() {
+    FirebaseFirestore.instance
+        .collection("chats")
+        .doc(chat.id)
+        .collection("messages")
+        .get()
+        .then((messages) {
+      messages.docs.forEach(
+        (message) {
+          message.reference.delete();
+        },
+      );
+    });
+    String storagePath = 'chats/${chat.id}/';
+    // Reference storageReference =
+    //     FirebaseStorage.instance.ref().child(storagePath);
+    // storageReference.delete();
+  }
 }
