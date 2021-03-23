@@ -40,4 +40,15 @@ class Functions {
         firstDay != secondDay) return true;
     return false;
   }
+
+  static String generateChatIdFromParticipants(List<String> participants) {
+    String result = participants[0] + participants[1];
+    print("Before: $result");
+    participants.sort((a, b) {
+      return a.toLowerCase().compareTo(b.toLowerCase());
+    });
+    result = participants[0] + "-" + participants[1];
+    print("After: $result");
+    return result;
+  }
 }

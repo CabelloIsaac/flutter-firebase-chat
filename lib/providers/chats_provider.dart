@@ -12,6 +12,7 @@ class ChatsProvider with ChangeNotifier {
   List<Chat> _chats = [];
   Chat _chat;
   List<Message> _messages = [];
+  bool _chatExists = false;
   bool _isListeningAllChats = false;
   bool _isListeningSingleChat = false;
   bool _isListeningMessages = false;
@@ -82,7 +83,9 @@ class ChatsProvider with ChangeNotifier {
           .doc(chat.id)
           .snapshots()
           .listen((document) {
-        chat = Chat.fromJson(id: document.id, data: document.data());
+        _chatExists = document.exists;
+        if (_chatExists)
+          chat = Chat.fromJson(id: document.id, data: document.data());
       });
       _isListeningSingleChat = true;
     }
@@ -149,7 +152,7 @@ class ChatsProvider with ChangeNotifier {
   }
 
   void _addMessageToChat(Map<String, dynamic> messageMap) async {
-    if (_chatExists()) {
+    if (_chatExists) {
       await FirebaseFirestore.instance
           .collection("chats")
           .doc(chat.id)
@@ -158,22 +161,22 @@ class ChatsProvider with ChangeNotifier {
       _updateLastMessageOnChat(messageMap);
     } else {
       print("Chat no existe '${chat.type}'}");
-      await _createNewChat(messageMap);
+      _createNewChat(messageMap);
     }
   }
 
-  bool _chatExists() => chat.id != null;
-
-  Future<void> _createNewChat(Map<String, dynamic> messageMap) async {
+  void _createNewChat(Map<String, dynamic> messageMap) {
     print(chat.participants);
     _addLastMessageToNewChat(messageMap);
-    final chatRef =
-        await FirebaseFirestore.instance.collection("chats").add(chat.toJson());
-
-    chat.id = chatRef.id;
-    chat = chat;
-    print("Chat created");
-    _addMessageToChat(messageMap);
+    FirebaseFirestore.instance
+        .collection("chats")
+        .doc(chat.id)
+        .set(chat.toJson())
+        .whenComplete(() {
+      chat = chat;
+      print("Chat created");
+      _addMessageToChat(messageMap);
+    });
   }
 
   void _addLastMessageToNewChat(Map<String, dynamic> messageMap) {

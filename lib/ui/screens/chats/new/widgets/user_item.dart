@@ -4,6 +4,7 @@ import 'package:flutter_firebase_chat/models/db_user.dart';
 import 'package:flutter_firebase_chat/providers/auth_provider.dart';
 import 'package:flutter_firebase_chat/providers/chats_provider.dart';
 import 'package:flutter_firebase_chat/ui/screens/chats/chat/chat_screen.dart';
+import 'package:flutter_firebase_chat/utils/functions.dart';
 import 'package:provider/provider.dart';
 
 class UserItem extends StatefulWidget {
@@ -52,7 +53,11 @@ class _UserItemState extends State<UserItem> {
   }
 
   Chat _createChatObject() {
+    String id =
+        Functions.generateChatIdFromParticipants(_getListOfParticipantsIds());
+
     return Chat(
+      id: id,
       participants: _getListOfParticipantsIds(),
       participantsData: _getListOfParticipantsData(),
       type: "chat",
