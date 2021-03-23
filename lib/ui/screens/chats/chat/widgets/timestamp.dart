@@ -17,7 +17,7 @@ class TimestampIndicator extends StatelessWidget {
     return Align(
       alignment: Alignment.bottomRight,
       child: Padding(
-        padding: EdgeInsets.only(top: 6, left: 6),
+        padding: EdgeInsets.all(10),
         child: timestamp != null
             ? Text(
                 "${Functions.getMessageTime(timestamp)}",

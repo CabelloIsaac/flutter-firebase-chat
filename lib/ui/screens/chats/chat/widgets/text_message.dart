@@ -29,7 +29,7 @@ class TextMessage extends StatelessWidget {
       child: Align(
         alignment: isSent ? Alignment.bottomRight : Alignment.bottomLeft,
         child: Container(
-          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+          padding: EdgeInsets.only(left: 10, top: 10),
           width: screenWidth * 0.7,
           decoration: BoxDecoration(
             color: isSent ? sentBackgrounColor : receivedBackgrounColor,
