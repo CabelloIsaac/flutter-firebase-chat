@@ -215,6 +215,7 @@ class ChatsProvider with ChangeNotifier {
     String storagePathImages = 'chats/${chat.id}/$type/';
     Reference storageReferenceImages =
         FirebaseStorage.instance.ref().child(storagePathImages);
+
     storageReferenceImages.listAll().then((value) {
       value.items.forEach((element) {
         element.delete();
@@ -239,5 +240,47 @@ class ChatsProvider with ChangeNotifier {
     });
     _clearStorageForChat("image");
     _clearStorageForChat("audio");
+  }
+
+  void deleteMessage(Message message) {
+    bool isLastSentMessage = message.id == messages.first.id;
+
+    FirebaseFirestore.instance
+        .collection("chats")
+        .doc(chat.id)
+        .collection("messages")
+        .doc(message.id)
+        .delete();
+
+    if (message.type != "text") {
+      _deleteMessageAssociatedMFile(message.body);
+    }
+
+    if (isLastSentMessage) {
+      _reassignLastMessageToChat();
+    }
+  }
+
+  void _deleteMessageAssociatedMFile(String url) {
+    FirebaseStorage.instance.refFromURL(url).delete();
+  }
+
+  void _reassignLastMessageToChat() {
+    FirebaseFirestore.instance
+        .collection("chats")
+        .doc(chat.id)
+        .collection("messages")
+        .orderBy("timestamp", descending: true)
+        .get()
+        .then((value) {
+      if (value.docs.isEmpty) {
+        _updateLastMessageOnChat(
+            Message(body: "", from: "", type: "text", id: "").toJson());
+      } else {
+        _updateLastMessageOnChat(Message.fromJson(
+                id: value.docs.first.id, data: value.docs.first.data())
+            .toJson());
+      }
+    });
   }
 }
