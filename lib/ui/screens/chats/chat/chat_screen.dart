@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_chat/models/message.dart';
 import 'package:flutter_firebase_chat/providers/chats_provider.dart';
+import 'package:flutter_firebase_chat/ui/widgets/empty_list_indicator.dart';
 import 'package:flutter_firebase_chat/utils/functions.dart';
 import 'package:provider/provider.dart';
 
@@ -27,34 +28,43 @@ class _ChatScreenState extends State<ChatScreen> {
       body: Column(
         children: [
           Expanded(
-            child: ListView.builder(
-              padding: EdgeInsets.only(top: 20),
-              reverse: true,
-              itemCount: messages.length,
-              itemBuilder: (context, index) {
-                Message currentMessage = messages[index];
+            child: Stack(
+              children: [
+                ListView.builder(
+                  padding: EdgeInsets.only(top: 20),
+                  reverse: true,
+                  itemCount: messages.length,
+                  itemBuilder: (context, index) {
+                    Message currentMessage = messages[index];
 
-                List<Widget> widgets = [MessageItem(messages[index])];
+                    List<Widget> widgets = [MessageItem(messages[index])];
 
-                if (currentMessage.timestamp != null) {
-                  if (index < messages.length - 1) {
-                    bool differentDays = false;
-                    Message nextMessage = messages[index + 1];
+                    if (currentMessage.timestamp != null) {
+                      if (index < messages.length - 1) {
+                        bool differentDays = false;
+                        Message nextMessage = messages[index + 1];
 
-                    differentDays = Functions.messagesAreDifferentDays(
-                        nextMessage, currentMessage);
+                        differentDays = Functions.messagesAreDifferentDays(
+                            nextMessage, currentMessage);
 
-                    if (differentDays)
-                      widgets.insert(0, MessageDayDivider(currentMessage));
-                  } else if (index == messages.length - 1) {
-                    widgets.insert(0, MessageDayDivider(currentMessage));
-                  }
-                }
+                        if (differentDays)
+                          widgets.insert(0, MessageDayDivider(currentMessage));
+                      } else if (index == messages.length - 1) {
+                        widgets.insert(0, MessageDayDivider(currentMessage));
+                      }
+                    }
 
-                return Column(
-                  children: widgets,
-                );
-              },
+                    return Column(
+                      children: widgets,
+                    );
+                  },
+                ),
+                if (messages.isEmpty)
+                  EmptyListIndicator(
+                    icon: "res/icons/empty_messages.svg",
+                    message: "Escribe un mensaje, o envía un audio o una foto.",
+                  ),
+              ],
             ),
           ),
           ChatInput(),
