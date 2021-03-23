@@ -9,7 +9,8 @@ class ImageDetailScreen extends StatelessWidget {
       appBar: AppBar(),
       body: SafeArea(
         child: Container(
-          child: InteractiveViewer(child: Image.network(url)),
+          child: Hero(
+              tag: url, child: InteractiveViewer(child: Image.network(url))),
         ),
       ),
     );

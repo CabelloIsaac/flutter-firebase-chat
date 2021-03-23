@@ -4,6 +4,7 @@ import 'package:flutter_firebase_chat/providers/auth_provider.dart';
 import 'package:flutter_firebase_chat/providers/chats_provider.dart';
 import 'package:flutter_firebase_chat/ui/screens/chats/chat/chat_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_firebase_chat/ui/screens/image_detail/image_detail_screen.dart';
 
 class ChatItem extends StatelessWidget {
   const ChatItem(this.chat);
@@ -16,10 +17,22 @@ class ChatItem extends StatelessWidget {
     String chatPicture = getChatPicture();
 
     return ListTile(
-      leading: CircleAvatar(
-        radius: 30,
-        child: !chatHasValidPicture ? Icon(Icons.person) : null,
-        backgroundImage: chatHasValidPicture ? NetworkImage(chatPicture) : null,
+      leading: Hero(
+        tag: chatPicture,
+        child: GestureDetector(
+          onTap: chatHasValidPicture
+              ? () {
+                  Navigator.pushNamed(context, ImageDetailScreen.route,
+                      arguments: chatPicture);
+                }
+              : null,
+          child: CircleAvatar(
+            radius: 30,
+            child: !chatHasValidPicture ? Icon(Icons.person) : null,
+            backgroundImage:
+                chatHasValidPicture ? NetworkImage(chatPicture) : null,
+          ),
+        ),
       ),
       title: Text(getChatName()),
       subtitle: Text(getLastMessageBody()),
