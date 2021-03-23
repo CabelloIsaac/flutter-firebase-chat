@@ -234,6 +234,8 @@ class ChatsProvider with ChangeNotifier {
           message.reference.delete();
         },
       );
+      _updateLastMessageOnChat(
+          Message(body: "", from: "", type: "text", id: "").toJson());
     });
     _clearStorageForChat("image");
     _clearStorageForChat("audio");
