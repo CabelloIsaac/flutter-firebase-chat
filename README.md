@@ -3,6 +3,8 @@
 
 Flutter Firebase Chat is a cross-platform application made with flutter that allows you to chat in real time with all registered users.
 
+- [Download Demo APK](https://cabelloisaac.com/wp-content/uploads/2021/03/flutter-firebase-chat.apk)
+
 ## Features
 
 - Chat in real time.
