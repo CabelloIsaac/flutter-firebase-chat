@@ -48,6 +48,7 @@ class _ChatInputState extends State<ChatInput> {
                           minLines: 1,
                           textInputAction: TextInputAction.newline,
                           onChanged: (s) => setState(() => {}),
+                          autofocus: false,
                           decoration: InputDecoration(
                             filled: true,
                             isCollapsed: true,

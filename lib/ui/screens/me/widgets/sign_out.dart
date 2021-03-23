@@ -24,11 +24,11 @@ class _SignOutState extends State<SignOut> {
         icon: Icons.exit_to_app,
         backgroundColor: Colors.red,
       ),
-      onTap: _cerrarSesion,
+      onTap: _showSignOutDialog,
     );
   }
 
-  Future<void> _cerrarSesion() async {
+  Future<void> _showSignOutDialog() async {
     return showDialog<void>(
       context: context,
       builder: (BuildContext context) {

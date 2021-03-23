@@ -25,7 +25,7 @@ class TextMessage extends StatelessWidget {
         : Theme.of(context).primaryTextTheme.bodyText1.color;
 
     return Container(
-      margin: EdgeInsets.fromLTRB(10, 0, 10, 5),
+      margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
       child: Align(
         alignment: isSent ? Alignment.bottomRight : Alignment.bottomLeft,
         child: Container(

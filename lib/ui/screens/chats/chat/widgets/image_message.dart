@@ -28,7 +28,7 @@ class ImageMessage extends StatelessWidget {
     return Hero(
       tag: message.body,
       child: Container(
-        padding: EdgeInsets.fromLTRB(10, 0, 10, 5),
+        margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
         child: Align(
           alignment: isSent ? Alignment.bottomRight : Alignment.bottomLeft,
           child: Container(

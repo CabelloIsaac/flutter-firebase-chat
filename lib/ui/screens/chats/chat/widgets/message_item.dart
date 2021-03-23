@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_chat/models/message.dart';
+import 'package:flutter_firebase_chat/providers/auth_provider.dart';
 import 'package:flutter_firebase_chat/providers/chats_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -13,17 +14,55 @@ class MessageItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final chatsProvider = Provider.of<ChatsProvider>(context);
+    bool isSent = AuthProvider.getCurrentUserUid() == message.from;
 
-    return Dismissible(
-      key: Key(message.id),
-      confirmDismiss: (value) async {
-        return _showConfirmationDialog(context);
-      },
-      background: Container(color: Colors.red),
-      onDismissed: (direction) {
-        chatsProvider.deleteMessage(message);
-      },
-      child: _getMessageWidget(),
+    if (isSent) {
+      return Dismissible(
+        key: Key(message.id),
+        confirmDismiss: (value) async {
+          return _showConfirmationDialog(context);
+        },
+        background: dismissibleBackground(MainAxisAlignment.start),
+        secondaryBackground: dismissibleBackground(MainAxisAlignment.end),
+        onDismissed: (direction) {
+          chatsProvider.deleteMessage(message);
+        },
+        child: _getMessageWidget(),
+      );
+    } else {
+      return _getMessageWidget();
+    }
+  }
+
+  Widget dismissibleBackground(MainAxisAlignment alignment) {
+    return Container(
+      color: Colors.red,
+      child: Align(
+        child: Row(
+          mainAxisAlignment: alignment,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: Icon(
+                Icons.delete,
+                color: Colors.white,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(right: 20.0),
+              child: Text(
+                " Eliminar",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w700,
+                ),
+                textAlign: TextAlign.right,
+              ),
+            ),
+          ],
+        ),
+        alignment: Alignment.centerRight,
+      ),
     );
   }
 
@@ -47,7 +86,7 @@ class MessageItem extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
-          title: Text("¿Quieres borrar este mensaje?"),
+          title: Text("¿Quieres eliminar este mensaje?"),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
@@ -63,7 +102,7 @@ class MessageItem extends StatelessWidget {
               },
             ),
             TextButton(
-              child: Text('Borrar'),
+              child: Text('Eliminar'),
               onPressed: () async {
                 Navigator.pop(context, true);
               },
