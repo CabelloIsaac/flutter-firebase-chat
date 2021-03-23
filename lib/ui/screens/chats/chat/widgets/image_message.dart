@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_chat/models/message.dart';
 import 'package:flutter_firebase_chat/providers/auth_provider.dart';
+import 'package:flutter_firebase_chat/ui/screens/image_detail/image_detail_screen.dart';
 
 import 'timestamp.dart';
 
@@ -24,34 +25,43 @@ class ImageMessage extends StatelessWidget {
         ? Theme.of(context).scaffoldBackgroundColor
         : Theme.of(context).primaryTextTheme.bodyText1.color;
 
-    return Container(
-      padding: EdgeInsets.fromLTRB(10, 0, 10, 5),
-      child: Align(
-        alignment: isSent ? Alignment.bottomRight : Alignment.bottomLeft,
-        child: Container(
-          width: screenWidth * 0.7,
-          decoration: BoxDecoration(
-            color: isSent ? sentBackgrounColor : receivedBackgrounColor,
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: Wrap(
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20),
-                  topRight: Radius.circular(20),
+    return Hero(
+      tag: message.body,
+      child: Container(
+        padding: EdgeInsets.fromLTRB(10, 0, 10, 5),
+        child: Align(
+          alignment: isSent ? Alignment.bottomRight : Alignment.bottomLeft,
+          child: Container(
+            width: screenWidth * 0.7,
+            decoration: BoxDecoration(
+              color: isSent ? sentBackgrounColor : receivedBackgrounColor,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Wrap(
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamed(context, ImageDetailScreen.route,
+                        arguments: message.body);
+                  },
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20),
+                    ),
+                    child: Image.network(
+                      message.body,
+                      width: screenWidth * 0.7,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
                 ),
-                child: Image.network(
-                  message.body,
-                  width: screenWidth * 0.7,
-                  fit: BoxFit.cover,
+                TimestampIndicator(
+                  timestamp: message.timestamp,
+                  textColor: textColor,
                 ),
-              ),
-              TimestampIndicator(
-                timestamp: message.timestamp,
-                textColor: textColor,
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
