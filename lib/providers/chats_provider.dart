@@ -122,7 +122,7 @@ class ChatsProvider with ChangeNotifier {
     Map<String, dynamic> messageMap = message.toJson();
     messageMap["timestamp"] = FieldValue.serverTimestamp();
 
-    String url = await uploadFile(image, "images", "jpg");
+    String url = await uploadFile(image, "image", "jpg");
     messageMap["body"] = url;
 
     _addMessageToChat(messageMap);
@@ -160,7 +160,6 @@ class ChatsProvider with ChangeNotifier {
           .add(messageMap);
       _updateLastMessageOnChat(messageMap);
     } else {
-      print("Chat no existe '${chat.type}'}");
       _createNewChat(messageMap);
     }
   }
@@ -208,10 +207,19 @@ class ChatsProvider with ChangeNotifier {
       );
       FirebaseFirestore.instance.collection("chats").doc(chat.id).delete();
     });
-    String storagePath = 'chats/${chat.id}/';
-    // Reference storageReference =
-    //     FirebaseStorage.instance.ref().child(storagePath);
-    // storageReference.delete();
+    _clearStorageForChat("image");
+    _clearStorageForChat("audio");
+  }
+
+  void _clearStorageForChat(String type) {
+    String storagePathImages = 'chats/${chat.id}/$type/';
+    Reference storageReferenceImages =
+        FirebaseStorage.instance.ref().child(storagePathImages);
+    storageReferenceImages.listAll().then((value) {
+      value.items.forEach((element) {
+        element.delete();
+      });
+    });
   }
 
   void emptyChat() {
@@ -227,9 +235,7 @@ class ChatsProvider with ChangeNotifier {
         },
       );
     });
-    String storagePath = 'chats/${chat.id}/';
-    // Reference storageReference =
-    //     FirebaseStorage.instance.ref().child(storagePath);
-    // storageReference.delete();
+    _clearStorageForChat("image");
+    _clearStorageForChat("audio");
   }
 }
