@@ -23,7 +23,7 @@ class _ProfilePictureState extends State<ProfilePicture> {
       child: Stack(
         children: [
           Hero(
-            tag: avatar,
+            tag: avatar.toString(),
             child: GestureDetector(
               onTap: () {
                 Navigator.pushNamed(context, ImageDetailScreen.route,

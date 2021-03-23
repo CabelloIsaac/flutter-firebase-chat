@@ -36,7 +36,7 @@ class _MyAppBarState extends State<MyAppBar> {
         title: Row(
           children: [
             Hero(
-              tag: chatPicture,
+              tag: chatPicture.toString(),
               child: CircleAvatar(
                 child: !chatHasValidPicture ? Icon(Icons.person) : null,
                 backgroundImage:

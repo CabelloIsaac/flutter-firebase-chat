@@ -19,7 +19,7 @@ class ChatItem extends StatelessWidget {
 
     return ListTile(
       leading: Hero(
-        tag: chatPicture,
+        tag: chatPicture.toString(),
         child: GestureDetector(
           onTap: chatHasValidPicture
               ? () {

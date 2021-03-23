@@ -26,7 +26,7 @@ class ImageMessage extends StatelessWidget {
         : Theme.of(context).primaryTextTheme.bodyText1.color;
 
     return Hero(
-      tag: message.body,
+      tag: message.body.toString(),
       child: Container(
         margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
         child: Align(

@@ -21,7 +21,7 @@ class ImageDetailScreen extends StatelessWidget {
       body: SafeArea(
         child: Container(
           child: Hero(
-            tag: url,
+            tag: url.toString(),
             child: InteractiveViewer(
               child: Image.network(
                 url,

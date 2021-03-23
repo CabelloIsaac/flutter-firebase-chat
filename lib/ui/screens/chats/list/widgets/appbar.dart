@@ -13,7 +13,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
       actions: [
         IconButton(
           icon: Hero(
-            tag: _authProvider.dbUser.avatar,
+            tag: _authProvider.dbUser.avatar.toString(),
             child: CircleAvatar(
               foregroundImage: _authProvider.dbUser.avatar != null
                   ? NetworkImage(
