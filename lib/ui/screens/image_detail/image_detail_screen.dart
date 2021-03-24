@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class ImageDetailScreen extends StatelessWidget {
@@ -10,6 +11,7 @@ class ImageDetailScreen extends StatelessWidget {
     final _notifySize = MediaQuery.of(context).padding.top;
     final _appBarSize = AppBar().preferredSize.height;
     final width = MediaQuery.of(context).size.width;
+    final height = _pageSize - (_notifySize + _appBarSize);
 
     return Scaffold(
       backgroundColor: Colors.black,
@@ -23,10 +25,13 @@ class ImageDetailScreen extends StatelessWidget {
           child: Hero(
             tag: url.toString(),
             child: InteractiveViewer(
-              child: Image.network(
-                url,
-                height: _pageSize - (_notifySize + _appBarSize),
+              child: CachedNetworkImage(
+                imageUrl: url,
+                height: height,
                 width: width,
+                errorWidget: (context, a, b) {
+                  return Image.asset("res/images/not-found.png");
+                },
               ),
             ),
           ),
