@@ -57,6 +57,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ChatsProvider()),
         ChangeNotifierProvider(create: (_) => UsersProvider()),
         ChangeNotifierProvider(create: (_) => MessageInputProvider()),
+        ChangeNotifierProvider(create: (_) => SettingsProvider()),
       ],
       child: StreamBuilder<BoxEvent>(
         stream: Hive.box("settings").watch(key: "darkTheme"),

@@ -14,6 +14,7 @@ class ChatItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final chatProvider = Provider.of<ChatsProvider>(context);
+    final width = MediaQuery.of(context).size.width;
 
     bool chatHasValidPicture = _chatHasValidPicture();
     String chatPicture = _getChatPicture();
@@ -51,7 +52,7 @@ class ChatItem extends StatelessWidget {
       ),
       onTap: () {
         chatProvider.chat = chat;
-        Navigator.pushNamed(context, ChatScreen.route);
+        if (width < 768) Navigator.pushNamed(context, ChatScreen.route);
       },
     );
   }

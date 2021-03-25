@@ -19,9 +19,10 @@ class UserItem extends StatefulWidget {
 class _UserItemState extends State<UserItem> {
   AuthProvider _authProvider;
   ChatsProvider _chatsProvider;
-
+  double width;
   @override
   Widget build(BuildContext context) {
+    width = MediaQuery.of(context).size.width;
     bool userHasValidAvatar = _userHasValidAvatar();
 
     _authProvider = Provider.of<AuthProvider>(context);
@@ -49,9 +50,12 @@ class _UserItemState extends State<UserItem> {
   void _openChatScreen() {
     Chat chat = _createChatObject();
 
-    print(chat.participants);
     _chatsProvider.chat = chat;
-    Navigator.pushNamed(context, ChatScreen.route);
+
+    if (width < 768)
+      Navigator.pushNamed(context, ChatScreen.route);
+    else
+      Navigator.pop(context);
   }
 
   Chat _createChatObject() {

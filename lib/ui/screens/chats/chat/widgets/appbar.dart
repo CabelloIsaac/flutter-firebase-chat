@@ -33,7 +33,7 @@ class _MyAppBarState extends State<MyAppBar> {
           : null,
       child: AppBar(
         elevation: 1.0,
-        titleSpacing: 0,
+        // titleSpacing: 0,
         title: Row(
           children: [
             Hero(
