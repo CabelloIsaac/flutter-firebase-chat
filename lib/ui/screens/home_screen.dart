@@ -31,17 +31,26 @@ class ResponsiveLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
 
-    return Row(
-      children: [
-        Expanded(
-          child: ChatsScreen(),
-        ),
-        if (width > 768) SectionDivider(),
-        if (width > 768) Expanded(child: ChatScreen()),
-        if (width > 1280) SectionDivider(),
-        if (width > 1280) Expanded(child: MyProfileScreen()),
-      ],
-    );
+    if (width < 768)
+      return ChatsScreen();
+    else if (width >= 768 && width < 1280)
+      return Row(
+        children: [
+          Expanded(child: ChatsScreen()),
+          SectionDivider(),
+          Expanded(child: ChatScreen(), flex: 2),
+        ],
+      );
+    else
+      return Row(
+        children: [
+          Expanded(child: ChatsScreen()),
+          SectionDivider(),
+          Expanded(child: ChatScreen(), flex: 2),
+          SectionDivider(),
+          Expanded(child: MyProfileScreen()),
+        ],
+      );
   }
 }
 
