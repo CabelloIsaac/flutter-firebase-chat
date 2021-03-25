@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_chat/models/chat.dart';
 import 'package:flutter_firebase_chat/models/db_user.dart';
@@ -29,8 +30,9 @@ class _UserItemState extends State<UserItem> {
     return ListTile(
       leading: CircleAvatar(
         child: !userHasValidAvatar ? Icon(Icons.person) : null,
-        backgroundImage:
-            userHasValidAvatar ? NetworkImage(widget.user.avatar) : null,
+        backgroundImage: userHasValidAvatar
+            ? CachedNetworkImageProvider(widget.user.avatar)
+            : null,
       ),
       title: Text(getUserName()),
       onTap: _openChatScreen,

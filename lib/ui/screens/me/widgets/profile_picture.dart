@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_chat/providers/auth_provider.dart';
 import 'package:flutter_firebase_chat/ui/screens/image_detail/image_detail_screen.dart';
@@ -39,7 +40,8 @@ class _ProfilePictureState extends State<ProfilePicture> {
                             size: 50,
                           )
                         : Container(),
-                backgroundImage: avatar == null ? null : NetworkImage(avatar),
+                backgroundImage:
+                    avatar == null ? null : CachedNetworkImageProvider(avatar),
               ),
             ),
           ),

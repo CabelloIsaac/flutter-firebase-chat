@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_chat/models/chat.dart';
 import 'package:flutter_firebase_chat/providers/auth_provider.dart';
@@ -38,9 +39,10 @@ class _MyAppBarState extends State<MyAppBar> {
             Hero(
               tag: chatPicture.toString(),
               child: CircleAvatar(
-                child: !chatHasValidPicture ? Icon(Icons.person) : null,
-                backgroundImage:
-                    chatHasValidPicture ? NetworkImage(chatPicture) : null,
+                foregroundImage: _chatHasValidPicture()
+                    ? CachedNetworkImageProvider(chatPicture)
+                    : null,
+                child: Icon(Icons.person),
               ),
             ),
             SizedBox(width: 10),

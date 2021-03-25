@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_chat/models/chat.dart';
 import 'package:flutter_firebase_chat/providers/auth_provider.dart';
@@ -29,9 +30,10 @@ class ChatItem extends StatelessWidget {
               : null,
           child: CircleAvatar(
             radius: 30,
-            child: !chatHasValidPicture ? Icon(Icons.person) : null,
-            backgroundImage:
-                chatHasValidPicture ? NetworkImage(chatPicture) : null,
+            foregroundImage: _chatHasValidPicture()
+                ? CachedNetworkImageProvider(_getChatPicture())
+                : null,
+            child: Icon(Icons.person),
           ),
         ),
       ),

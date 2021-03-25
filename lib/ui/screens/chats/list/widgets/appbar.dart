@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_chat/providers/auth_provider.dart';
 import 'package:flutter_firebase_chat/ui/screens/me/my_profile.dart';
@@ -16,9 +17,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
             tag: _authProvider.dbUser.avatar.toString(),
             child: CircleAvatar(
               foregroundImage: _authProvider.dbUser.avatar != null
-                  ? NetworkImage(
-                      _authProvider.dbUser.avatar,
-                    )
+                  ? CachedNetworkImageProvider(_authProvider.dbUser.avatar)
                   : null,
               child: Icon(Icons.person),
             ),
