@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase_chat/models/message.dart';
 import 'package:flutter_firebase_chat/providers/auth_provider.dart';
@@ -54,8 +55,8 @@ class ImageMessage extends StatelessWidget {
                       topLeft: Radius.circular(20),
                       topRight: Radius.circular(20),
                     ),
-                    child: Image.network(
-                      message.body,
+                    child: CachedNetworkImage(
+                      imageUrl: message.body,
                       width: messageWidth,
                       fit: BoxFit.cover,
                     ),

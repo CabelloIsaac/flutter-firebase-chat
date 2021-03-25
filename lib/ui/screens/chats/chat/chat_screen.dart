@@ -23,13 +23,17 @@ class _ChatScreenState extends State<ChatScreen> {
     _chatsProvider = Provider.of<ChatsProvider>(context);
     final messages = _chatsProvider.messages;
 
-    if (MediaQuery.of(context).size.width > 768 && _chatsProvider.chat == null)
-      return Scaffold(
-        body: EmptyListIndicator(
-          icon: "res/icons/empty_messages.svg",
-          message: "Selecciona un contacto para conversar.",
-        ),
-      );
+    if (MediaQuery.of(context).size.width >= 768) {
+      if (_chatsProvider.chat == null)
+        return Scaffold(
+          body: EmptyListIndicator(
+            icon: "res/icons/empty_messages.svg",
+            message: "Selecciona un contacto para conversar.",
+          ),
+        );
+    } else {
+      if (_chatsProvider.chat == null) Navigator.pop(context);
+    }
 
     return Scaffold(
       appBar: MyAppBar(),

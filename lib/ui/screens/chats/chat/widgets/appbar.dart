@@ -16,8 +16,10 @@ class MyAppBar extends StatefulWidget implements PreferredSizeWidget {
 class _MyAppBarState extends State<MyAppBar> {
   ChatsProvider _chatsProvider;
   Chat _chat;
+  double width;
   @override
   Widget build(BuildContext context) {
+    width = MediaQuery.of(context).size.width;
     _chatsProvider = Provider.of<ChatsProvider>(context);
     _chat = _chatsProvider.chat;
 
@@ -92,7 +94,8 @@ class _MyAppBarState extends State<MyAppBar> {
       "Esto borrará todos los mensajes en esta conversación y la quitará de tu lista de conversaciones.",
     )) {
       _chatsProvider.deleteChat();
-      Navigator.pop(context);
+
+      if (width < 768) Navigator.pop(context);
     }
   }
 
