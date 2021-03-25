@@ -5,7 +5,6 @@ import 'package:flutter_firebase_chat/ui/screens/chats/chat/chat_screen.dart';
 import 'package:flutter_firebase_chat/ui/screens/chats/list/chats_screen.dart';
 import 'package:flutter_firebase_chat/ui/screens/me/my_profile.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
 
 class HomeScreen extends StatelessWidget {
   @override

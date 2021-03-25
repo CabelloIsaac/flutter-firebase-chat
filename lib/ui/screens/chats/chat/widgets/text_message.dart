@@ -15,6 +15,11 @@ class TextMessage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
+    double messageWidth;
+    if (screenWidth < 768)
+      messageWidth = screenWidth * 0.7;
+    else
+      messageWidth = 400;
 
     bool isSent = message.from == AuthProvider.getCurrentUserUid();
     final receivedBackgrounColor =
@@ -29,8 +34,8 @@ class TextMessage extends StatelessWidget {
       child: Align(
         alignment: isSent ? Alignment.bottomRight : Alignment.bottomLeft,
         child: Container(
-          padding: EdgeInsets.only(left: 10, top: 10),
-          width: screenWidth * 0.7,
+          padding: EdgeInsets.all(15),
+          width: messageWidth,
           decoration: BoxDecoration(
             color: isSent ? sentBackgrounColor : receivedBackgrounColor,
             borderRadius: BorderRadius.circular(20),

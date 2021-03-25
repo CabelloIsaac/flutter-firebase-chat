@@ -16,19 +16,16 @@ class TimestampIndicator extends StatelessWidget {
   Widget build(BuildContext context) {
     return Align(
       alignment: Alignment.bottomRight,
-      child: Padding(
-        padding: EdgeInsets.all(10),
-        child: timestamp != null
-            ? Text(
-                "${Functions.getMessageTime(timestamp)}",
-                style: TextStyle(fontSize: 11, color: textColor),
-              )
-            : Icon(
-                Icons.access_time_rounded,
-                color: textColor,
-                size: 13,
-              ),
-      ),
+      child: timestamp != null
+          ? Text(
+              "${Functions.getMessageTime(timestamp)}",
+              style: TextStyle(fontSize: 11, color: textColor),
+            )
+          : Icon(
+              Icons.access_time_rounded,
+              color: textColor,
+              size: 13,
+            ),
     );
   }
 }

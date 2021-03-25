@@ -36,6 +36,13 @@ class _AudioMessageState extends State<AudioMessage> {
   Widget build(BuildContext context) {
     message = widget.message;
     final screenWidth = MediaQuery.of(context).size.width;
+
+    double messageWidth;
+    if (screenWidth < 768)
+      messageWidth = screenWidth * 0.7;
+    else
+      messageWidth = 400;
+
     bool isSent = message.from == AuthProvider.getCurrentUserUid();
     final receivedBackgrounColor =
         Theme.of(context).primaryTextTheme.bodyText1.color.withOpacity(0.1);
@@ -49,45 +56,38 @@ class _AudioMessageState extends State<AudioMessage> {
       child: Align(
         alignment: isSent ? Alignment.bottomRight : Alignment.bottomLeft,
         child: Container(
-          padding: EdgeInsets.only(left: 10, top: 10),
-          width: screenWidth * 0.7,
+          padding: EdgeInsets.all(15),
+          width: messageWidth,
           decoration: BoxDecoration(
             color: isSent ? sentBackgrounColor : receivedBackgrounColor,
             borderRadius: BorderRadius.circular(20),
           ),
-          child: Wrap(
-            // alignment: WrapAlignment.end,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  IconButton(
-                    icon: !_isPlaying || _isPaused
-                        ? Icon(Icons.play_arrow)
-                        : Icon(Icons.pause),
-                    onPressed: _play,
-                    color: textColor,
-                  ),
-                  Expanded(
-                    child: Slider(
-                      activeColor: textColor,
-                      inactiveColor: textColor.withOpacity(0.5),
-                      max: _totalDuration != null
-                          ? _totalDuration.toDouble()
-                          : 0,
-                      value: _currentDuration != null
-                          ? _currentDuration.toDouble()
-                          : 0,
-                      min: 0,
-                      onChanged: (value) {
-                        audioPlayer.seek(Duration(microseconds: value.toInt()));
-                      },
-                      onChangeEnd: (value) {
-                        print(value);
-                      },
-                    ),
-                  ),
-                ],
+              IconButton(
+                icon: !_isPlaying || _isPaused
+                    ? Icon(Icons.play_arrow)
+                    : Icon(Icons.pause),
+                onPressed: _play,
+                color: textColor,
+              ),
+              Expanded(
+                child: Slider(
+                  activeColor: textColor,
+                  inactiveColor: textColor.withOpacity(0.5),
+                  max: _totalDuration != null ? _totalDuration.toDouble() : 0,
+                  value: _currentDuration != null
+                      ? _currentDuration.toDouble()
+                      : 0,
+                  min: 0,
+                  onChanged: (value) {
+                    audioPlayer.seek(Duration(microseconds: value.toInt()));
+                  },
+                  onChangeEnd: (value) {
+                    print(value);
+                  },
+                ),
               ),
               TimestampIndicator(
                 timestamp: message.timestamp,

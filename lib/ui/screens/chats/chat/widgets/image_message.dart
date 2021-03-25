@@ -16,6 +16,11 @@ class ImageMessage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
+    double messageWidth;
+    if (screenWidth < 768)
+      messageWidth = screenWidth * 0.7;
+    else
+      messageWidth = 400;
 
     bool isSent = message.from == AuthProvider.getCurrentUserUid();
     final receivedBackgrounColor =
@@ -32,7 +37,7 @@ class ImageMessage extends StatelessWidget {
         child: Align(
           alignment: isSent ? Alignment.bottomRight : Alignment.bottomLeft,
           child: Container(
-            width: screenWidth * 0.7,
+            width: messageWidth,
             decoration: BoxDecoration(
               color: isSent ? sentBackgrounColor : receivedBackgrounColor,
               borderRadius: BorderRadius.circular(20),
@@ -51,14 +56,17 @@ class ImageMessage extends StatelessWidget {
                     ),
                     child: Image.network(
                       message.body,
-                      width: screenWidth * 0.7,
+                      width: messageWidth,
                       fit: BoxFit.cover,
                     ),
                   ),
                 ),
-                TimestampIndicator(
-                  timestamp: message.timestamp,
-                  textColor: textColor,
+                Padding(
+                  padding: const EdgeInsets.all(15),
+                  child: TimestampIndicator(
+                    timestamp: message.timestamp,
+                    textColor: textColor,
+                  ),
                 ),
               ],
             ),
