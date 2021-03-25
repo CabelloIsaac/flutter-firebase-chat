@@ -36,20 +36,22 @@ class ResponsiveLayout extends StatelessWidget {
         Expanded(
           child: ChatsScreen(),
         ),
-        Container(
-          width: 1,
-          color: Theme.of(context)
-              .primaryTextTheme
-              .bodyText1
-              .color
-              .withOpacity(0.1),
-        ),
-        if (width > 768)
-          Expanded(
-            child: ChatScreen(),
-          ),
+        if (width > 768) SectionDivider(),
+        if (width > 768) Expanded(child: ChatScreen()),
+        if (width > 1280) SectionDivider(),
         if (width > 1280) Expanded(child: MyProfileScreen()),
       ],
+    );
+  }
+}
+
+class SectionDivider extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 1,
+      color:
+          Theme.of(context).primaryTextTheme.bodyText1.color.withOpacity(0.1),
     );
   }
 }
